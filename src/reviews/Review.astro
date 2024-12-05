@@ -1,0 +1,64 @@
+---
+import { getReviews } from '../reviews/fetchReviews.js';
+
+// Состояние для хранения отзывов и страницы
+let reviews = [];
+
+// Функция для загрузки отзывов
+async function fetchNextPage() {
+  const firstPage = await getReviews(1);
+  const secondPage = await getReviews(2);
+  const thirdPage = await getReviews(3);
+  const forthPage = await getReviews(4);
+  reviews = [...firstPage, ...secondPage, ...thirdPage, ...forthPage];
+}
+
+await fetchNextPage();
+---
+
+<div
+  class="reviews-carousel"
+>
+  {reviews.map((review, index) => (
+    <div class="review-card" key={index}>
+      <p>{review}</p>
+    </div>
+  ))}
+</div>
+
+<style>
+  .reviews-carousel {
+    display: flex; /* Используем Grid Layout */
+    gap: 1rem; /* Отступы между карточками */
+    padding: 1rem;
+    scroll-snap-type: x mandatory; /* Привязка к карточкам при скролле */
+    overflow-x: auto; /* Горизонтальный скролл */
+    align-items: flex-start; /* Выравнивание карточек по верху */
+  }
+
+  .review-card p {
+    font-size: 1.1rem; /* Увеличенный размер текста */
+    color: #000; /* Черный цвет текста */
+    font-weight: 500; /* Немного жирный текст */
+    line-height: 1.5; /* Увеличенный межстрочный интервал для удобочитаемости */
+  }
+
+  .review-card {
+    width: 300px;
+    padding: 1rem;
+    background: #ffffff; /* Светлый фон для контраста */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Увеличиваем тень для большего объема */
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    overflow: hidden; /* Избавляемся от случайного выхода контента за границы */
+  }
+
+  .review-card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Добавляем эффект при наведении */
+    transform: translateY(-2px); /* Небольшой подъем карточки */
+    transition: all 0.3s ease; /* Анимация перехода */
+  }
+
+</style>
+

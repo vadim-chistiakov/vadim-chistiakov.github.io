@@ -6,18 +6,20 @@ import type { iconPaths } from './IconPaths';
 /** Main menu items */
 const textLinks: { label: string; href: string }[] = [
 	{ label: 'Home', href: '/' },
-	{ label: 'Work', href: '/work/' },
+	{ label: 'Services', href: '/services/' },
 	{ label: 'About', href: '/about/' },
 ];
 
 /** Icon links to social media — edit these with links to your profiles! */
 const iconLinks: { label: string; href: string; icon: keyof typeof iconPaths }[] = [
-	{ label: 'Twitter', href: 'https://twitter.com/me', icon: 'twitter-logo' },
-	{ label: 'Twitch', href: 'https://twitch.tv/me', icon: 'twitch-logo' },
-	{ label: 'GitHub', href: 'https://github.com/me', icon: 'github-logo' },
-	{ label: 'CodePen', href: 'https://codepen.io/me', icon: 'codepen-logo' },
-	{ label: 'dribbble', href: 'https://dribbble.com/me', icon: 'dribbble-logo' },
-	{ label: 'YouTube', href: 'https://www.youtube.com/@me/', icon: 'youtube-logo' },
+	{ label: 'Telegram', href: 'https://t.me/ios_mobile_developer', icon: 'telegram-logo' },
+	{ label: 'Boosty', href: 'https://boosty.to/chistiakov', icon: 'boosty-logo' },
+	{ label: 'Linkedin', href: 'https://www.linkedin.com/in/vadim-chistiakov/', icon: 'linkedin-logo' },
+	{ label: 'instagram', href: 'https://www.instagram.com/vadim_chist/', icon: 'instagram-logo' },
+	{ label: 'GitHub', href: 'https://github.com/vadim-chistiakov', icon: 'github-logo' },
+	{ label: 'Habr', href: 'https://habr.com/ru/users/titanium007', icon: 'habr-logo' },
+	{ label: 'Hackernoon', href: 'https://hackernoon.com/u/vadimchistiakov', icon: 'hackernoon-logo' },
+	{ label: 'Leetcode', href: 'https://leetcode.com/Titaniys/', icon: 'leetcode-logo' }
 ];
 
 /** Test if a link is pointing to the current page. */
@@ -33,7 +35,7 @@ const isCurrentPage = (href: string) => {
 	<div class="menu-header">
 		<a href="/" class="site-title">
 			<Icon icon="terminal-window" color="var(--accent-regular)" size="1.6em" gradient />
-			Jeanine White
+			Vadim Chistiakov
 		</a>
 		<menu-button>
 			<template>

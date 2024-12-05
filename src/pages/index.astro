@@ -10,14 +10,15 @@ import Grid from '../components/Grid.astro';
 import Hero from '../components/Hero.astro';
 import Icon from '../components/Icon.astro';
 import Pill from '../components/Pill.astro';
-import PortfolioPreview from '../components/PortfolioPreview.astro';
+import ServicePreview from '../components/ServicePreview.astro';
+import Reviews from '../reviews/Review.astro';
 
 // Page section components
 import ContactCTA from '../components/ContactCTA.astro';
 import Skills from '../components/Skills.astro';
 
 // Content Fetching: List 5 most recent services
-const projects = (await getCollection('work'))
+const projects = (await getCollection('services'))
 	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
 	.slice(0, 5);
 
@@ -64,7 +65,7 @@ const projects = (await getCollection('work'))
 						{
 							projects.map((project) => (
 								<li>
-									<PortfolioPreview project={project} />
+									<ServicePreview project={project} />
 								</li>
 							))
 						}
@@ -72,7 +73,7 @@ const projects = (await getCollection('work'))
 				</div>
 
 				<div class="cta">
-					<CallToAction href="/work/">
+					<CallToAction href="/services/">
 						View All
 						<Icon icon="arrow-right" size="1.2em" />
 					</CallToAction>
@@ -80,7 +81,7 @@ const projects = (await getCollection('work'))
 			</section>
 
 			<section class="section with-background bg-variant">
-				<header class="section-header stack gap-2 lg:gap-4">
+				<header class="section-header">
 					<h3>Отзывы</h3>
 					<p>
 						Источник отзывов телеграм канал <a href="https://t.me/it_mentors"> It mentors</a>  
@@ -89,11 +90,15 @@ const projects = (await getCollection('work'))
 						Все отзывы неанонимные. 
 					</p>
 				</header>
-
+			</section>
+			<section>
+				<Reviews />
+			</section>
+			<section>
 				<div class="gallery">
 					<Grid variant="small">
 						{
-							['Medium', 'BuzzFeed', 'The Next Web', 'awwwards.', 'TechCrunch'].map((brand) => (
+							['Сбербанк', 'Яндекс.Карты', 'VK Видео', 'Aльфа Банк', 'Лэтуаль'].map((brand) => (
 								<li class="mention-card">
 									<p>{brand}</p>
 								</li>
@@ -103,7 +108,6 @@ const projects = (await getCollection('work'))
 				</div>
 			</section>
 		</main>
-
 		<ContactCTA />
 	</div>
 </BaseLayout>

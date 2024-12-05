@@ -2,14 +2,15 @@
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
-	project: CollectionEntry<'work'>;
+	project: CollectionEntry<'services'>;
 }
 
 const { data, id } = Astro.props.project;
 ---
 
-<a class="card" href={`/work/${id}`}>
+<a class="card" href={`/services/${id}`}>
 	<span class="title">{data.title}</span>
+	<span class="price">{data.price || 'Цена не указана'}</span>
 	<img src={data.img} alt={data.img_alt || ''} loading="lazy" decoding="async" />
 </a>
 
@@ -44,6 +45,18 @@ const { data, id } = Astro.props.project;
 		border-radius: 0.375rem;
 	}
 
+	.price {
+		grid-area: 1 / 2 / 2 / 3;
+		z-index: 1;
+		margin: 0.5rem;
+		padding: 0.5rem 1rem;
+		background: var(--gray-999);
+		color: var(--gray-200);
+		border-radius: 0.375rem;
+		justify-self: end;  /*Расположить элемент справа */
+    	align-self: start;  /* Расположить элемент сверху */
+	}
+
 	img {
 		grid-area: 1 / 1 / 3 / 3;
 		width: 100%;
@@ -58,6 +71,10 @@ const { data, id } = Astro.props.project;
 		}
 
 		.title {
+			border-radius: 0.9375rem;
+		}
+
+		.price {
 			border-radius: 0.9375rem;
 		}
 	}
