@@ -22,6 +22,32 @@ const projects = (await getCollection('services'))
 	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
 	.slice(0, 5);
 
+// Компании в которые я помог устроится
+const companies = [
+	'Сбербанк', 
+	'Сбер-Бизнес',
+	'ВТБ',
+	'Яндекс-Pay',
+	'Яндекс-Market',
+	'Яндекс-GO',
+	'VK-Видео',
+	'Дзен',
+	'Альфа Банк',
+	'Совкомбанк',
+	'Метрополитен',
+	'Meta',
+	'Rutube',
+	'Лэтуаль'
+]
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const randomIndex = Math.floor(Math.random() * (i + 1)); // Случайный индекс от 0 до i
+    [array[i], array[randomIndex]] = [array[randomIndex], array[i]]; // Меняем местами элементы
+  }
+  return array;
+}
+
 // Full Astro Component Syntax:
 // https://docs.astro.build/basics/astro-components/
 ---
@@ -31,7 +57,7 @@ const projects = (await getCollection('services'))
 		<div class="wrapper stack gap-8 lg:gap-20">
 			<header class="hero">
 				<Hero
-					title="Hello, my name is Vadim Chistiakov"
+					title="Чистяков Вадим - ментор"
 					tagline="iOS разработчик с 2017 года"
 					align="start"
 				>
@@ -57,7 +83,7 @@ const projects = (await getCollection('services'))
 			<section class="section with-background with-cta">
 				<header class="section-header stack gap-2 lg:gap-4">
 					<h3>Услуги</h3>
-					<p>Take a look below at some of my featured work for clients from the past few years.</p>
+					<p>Консультации и менторство</p>
 				</header>
 
 				<div class="gallery">
@@ -90,23 +116,27 @@ const projects = (await getCollection('services'))
 						Все отзывы неанонимные. 
 					</p>
 				</header>
-			</section>
-			<section>
-				<Reviews />
-			</section>
-			<section>
+				<div class="gallery">
+					<Reviews />	
+				</div>
+			</section>	
+			<section class="section with-background bg-variant">
+				<header class="section-header">
+					<h3>Куда получали офферы менти?</h3>
+				</header>
 				<div class="gallery">
 					<Grid variant="small">
 						{
-							['Сбербанк', 'Яндекс.Карты', 'VK Видео', 'Aльфа Банк', 'Лэтуаль'].map((brand) => (
+							shuffleArray(companies).map((brand) => (
 								<li class="mention-card">
 									<p>{brand}</p>
 								</li>
 							))
 						}
-					</Grid>
+					</Grid>	
 				</div>
-			</section>
+			</section>	
+			
 		</main>
 		<ContactCTA />
 	</div>
@@ -238,7 +268,7 @@ const projects = (await getCollection('services'))
 
 	.mention-card {
 		display: flex;
-		height: 7rem;
+		height: 4rem;
 		justify-content: center;
 		align-items: center;
 		text-align: center;
@@ -252,7 +282,7 @@ const projects = (await getCollection('services'))
 	@media (min-width: 50em) {
 		.mention-card {
 			border-radius: 1.5rem;
-			height: 9.5rem;
+			height: 4.5rem;
 		}
 	}
 </style>
