@@ -37,9 +37,14 @@ const { Content } = await render(entry);
 					<Hero title={entry.data.title} align="start">
 						<div class="details">
 							<div class="tags">
-								{entry.data.tags.map((t) => <Pill>{t}</Pill>)}
+								<Pill>{entry.data.price}</Pill>
 							</div>
 							<p class="description">{entry.data.description}</p>
+						</div>
+						<div class="details">
+							<div class="tags">
+								{entry.data.tags.map((t) => <Pill>{t}</Pill>)}
+							</div>
 						</div>
 					</Hero>
 				</div>

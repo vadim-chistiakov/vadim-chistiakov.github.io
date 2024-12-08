@@ -1,7 +1,7 @@
 ---
 title: Консультация
-price: от 7.000₽/час
-publishDate: 2020-03-04 00:00:00
+price: 7.000₽/час
+publishDate: 2018-03-04 00:00:00
 img: /assets/mentor-1.png
 img_alt: Консультация 
 description: |
@@ -39,3 +39,4 @@ tags:
 - [**Salary negotiation** 🤑](https://t.me/ios_mobile_developer/109)
 - [**Две работы** 👨‍💻👨‍💻](https://t.me/ios_mobile_developer/102)
 - [**Overleaf - сайт с шаблонами резюме**](https://t.me/ios_mobile_developer/72)
+- [**Топ бесячих вопросов в iOS собеседованиях ❌**](https://t.me/ios_mobile_developer/186)

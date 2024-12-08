@@ -1,11 +1,11 @@
 ---
 title: Mock-интервью
-publishDate: 2019-12-01 00:00:00
+publishDate: 2020-12-01 00:00:00
 img: /assets/mentor-5.jpg
 img_alt: A bright pink sheet of paper used to wrap flowers curves in front of rich blue background
 description: |
   Оплата возможна в любой валюте и крипте
-price: от 8.000₽/час 
+price: 8.000₽/час 
 tags:
   - Теория
   - Лайф-кодинг

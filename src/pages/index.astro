@@ -19,8 +19,7 @@ import Skills from '../components/Skills.astro';
 
 // Content Fetching: List 5 most recent services
 const projects = (await getCollection('services'))
-	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
-	.slice(0, 5);
+	.sort((a, b) => a.data.publishDate.valueOf() - b.data.publishDate.valueOf())
 
 // Компании в которые я помог устроится
 const companies = [
@@ -57,28 +56,42 @@ function shuffleArray(array) {
 		<div class="wrapper stack gap-8 lg:gap-20">
 			<header class="hero">
 				<Hero
-					title="Чистяков Вадим - ментор"
-					tagline="iOS разработчик с 2017 года"
+					title="Чистяков Вадим"
 					align="start"
 				>
 					<div class="roles">
 						<Pill><Icon icon="code" size="1.33em" /> Developer</Pill>
-						<Pill><Icon icon="microphone-stage" size="1.33em" /> Mentor</Pill>
+						<Pill><Icon icon="trophy" size="1.33em" /> Teamlead</Pill>
+						<Pill><Icon icon="rocket-launch" size="1.33em" /> Mentor</Pill>
 						<Pill><Icon icon="pencil-line" size="1.33em" /> Writer</Pill>
+						<Pill><Icon icon="microphone-stage" size="1.33em" /> Speaker</Pill>
 					</div>
 				</Hero>
 
 				<img
-					alt="Jeanine White smiling in a red plaid shirt and tortoise shell glasses"
+					alt="Main photo"
 					width="480"
 					height="620"
 					src="/assets/portrait.jpg"
 				/>
 			</header>
-
 			<Skills />
 		</div>
-
+		<main class="wrapper stack gap-20 lg:gap-48">
+			<section class="section with-background bg-variant">
+				<header class="section-header">
+					<h3>С чем готов помочь</h3>
+				</header>
+				<div class="gallery">
+					<h5><Icon icon="arrow-right" color="var(--accent-regular)" size="2rem" gradient /> Получить оффер в топ компании на позицию iOS разработчика</h5>
+					<h5><Icon icon="arrow-right" color="var(--accent-regular)" size="2rem" gradient /> Пробить зарплатный потолок как джуниорам, так и начинающим лидам</h5>
+					<h5><Icon icon="arrow-right" color="var(--accent-regular)" size="2rem" gradient /> Прокачать хард и софт компетенции в iOS и IT в целом.</h5>
+					<h5><Icon icon="arrow-right" color="var(--accent-regular)" size="2rem" gradient /> Построить родмап обучения в зависимости от уже имеющихся знаний и целей</h5>
+					<h5><Icon icon="arrow-right" color="var(--accent-regular)" size="2rem" gradient /> Составить резюме, подготовиться к любым типам интервью</h5>
+					<h5><Icon icon="arrow-right" color="var(--accent-regular)" size="2rem" gradient /> Оформить и подать кейс на Визу Таланта в Великобританию</h5>
+				</div>
+			</section>
+		</main>
 		<main class="wrapper stack gap-20 lg:gap-48">
 			<section class="section with-background with-cta">
 				<header class="section-header stack gap-2 lg:gap-4">
@@ -100,12 +113,11 @@ function shuffleArray(array) {
 
 				<div class="cta">
 					<CallToAction href="/services/">
-						View All
+						Смотреть все
 						<Icon icon="arrow-right" size="1.2em" />
 					</CallToAction>
 				</div>
 			</section>
-
 			<section class="section with-background bg-variant">
 				<header class="section-header">
 					<h3>Отзывы</h3>
@@ -120,6 +132,7 @@ function shuffleArray(array) {
 					<Reviews />	
 				</div>
 			</section>	
+
 			<section class="section with-background bg-variant">
 				<header class="section-header">
 					<h3>Куда получали офферы менти?</h3>
@@ -257,6 +270,11 @@ function shuffleArray(array) {
 
 		.gallery {
 			grid-area: gallery;
+		}
+
+		.gallery h5 {
+			grid-area: gallery;
+			line-height: 2;
 		}
 
 		.cta {

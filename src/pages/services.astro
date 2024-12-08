@@ -8,8 +8,8 @@ import ServicePreview from '../components/ServicePreview.astro';
 import Hero from '../components/Hero.astro';
 import Grid from '../components/Grid.astro';
 
-const projects = (await getCollection('services')).sort(
-	(a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
+const projects = (await getCollection('services'))
+.sort((a, b) => a.data.publishDate.valueOf() - b.data.publishDate.valueOf(),
 );
 ---
 
@@ -21,7 +21,7 @@ const projects = (await getCollection('services')).sort(
 		<main class="wrapper stack gap-8">
 			<Hero
 				title="Услуги"
-				tagline="See my most recent projects below to get an idea of my past experience."
+				tagline="Здесь ты найдешь детальное описание с чем я готов помочь. Если твой запрос отличается от списка ниже не стесняйся написать в телеграм"
 				align="start"
 			/>
 			<Grid variant="offset">
