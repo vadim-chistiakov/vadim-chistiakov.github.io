@@ -34,6 +34,8 @@ await fetchNextPage();
     scroll-snap-type: x mandatory; /* Привязка к карточкам при скролле */
     overflow-x: auto; /* Горизонтальный скролл */
     align-items: flex-start; /* Выравнивание карточек по верху */
+    -webkit-overflow-scrolling: touch;
+    width: 100%; /* Ограничить ширину контейнера */
   }
 
   .review-card p {

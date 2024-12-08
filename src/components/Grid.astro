@@ -62,4 +62,22 @@ const { variant } = Astro.props;
 			flex-basis: 20rem;
 		}
 	}
+
+	/* Мобильная оптимизация */
+	@media (max-width: 768px) {
+  		.grid {
+    		grid-template-columns: 1fr; /* Одна колонка */
+    		gap: 1rem; /* Уменьшение отступов */
+  		}
+
+  		.grid.small {
+    		display: grid; /* Возвращаем к grid для адаптации */
+    		grid-template-columns: 1fr; /* Одна колонка для удобства */
+    		gap: 1rem; /* Небольшие отступы */
+  		}
+
+  		.grid.small > :global(*) {
+    		flex-basis: auto; /* Автоматическая ширина элементов */
+  		}
+	}
 </style>

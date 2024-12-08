@@ -69,7 +69,18 @@ const { Content } = await render(entry);
 	}
 
 	.back-link {
-		display: none;
+  		display: inline-flex;
+  		align-items: center;
+  		gap: 0.5rem;
+  		text-decoration: none;
+  		font-size: 1rem;
+	}
+
+	@media (max-width: 768px) {
+  		.back-link {
+    		font-size: 0.875rem; /* Уменьшить размер текста для мобильных устройств */
+    		padding: 0.5rem; /* Добавить внутренний отступ */
+  		}
 	}
 
 	.details {
@@ -85,6 +96,18 @@ const { Content } = await render(entry);
 		display: flex;
 		gap: 0.5rem;
 	}
+
+	@media (max-width: 768px) {
+ 		 .tags {
+    		flex-direction: column; /* Располагаем теги в один столбик */
+    		gap: 0.75rem; /* Увеличиваем отступы для лучшего восприятия */
+  		}
+
+  		.tags > * {
+    		width: 100%; /* Теги занимают всю ширину */
+    		text-align: center; /* Центрируем текст внутри тега */
+  		}
+}
 
 	.description {
 		font-size: var(--text-lg);
