@@ -118,21 +118,22 @@ function shuffleArray(array) {
 					</CallToAction>
 				</div>
 			</section>
+		</main>
+		<main class="wrapper stack">
 			<section class="section with-background bg-variant">
 				<header class="section-header">
 					<h3>Отзывы</h3>
-					<p>
-						Источник отзывов телеграм канал <a href="https://t.me/it_mentors"> It mentors</a>  
-					</p>
-					<p>
-						Все отзывы неанонимные. 
-					</p>
+					<h5>Источник отзывов телеграм канал <a href="https://t.me/it_mentors"> It mentors</a></h5>
+					<h5>Все отзывы неанонимные.</h5>
 				</header>
-				<div class="gallery">
+			</section>	
+			<section class="section">
+				<div class="wrapper">
 					<Reviews />	
 				</div>
-			</section>	
-
+			</section>
+		</main>
+		<main class="wrapper stack">
 			<section class="section with-background bg-variant">
 				<header class="section-header">
 					<h3>Куда получали офферы менти?</h3>
@@ -149,7 +150,6 @@ function shuffleArray(array) {
 					</Grid>	
 				</div>
 			</section>	
-			
 		</main>
 		<ContactCTA />
 	</div>
@@ -252,6 +252,10 @@ function shuffleArray(array) {
 
 	.section-header h3 {
 		font-size: var(--text-2xl);
+	}
+
+	.section-header.services {
+		text-align: center;
 	}
 
 	@media (min-width: 50em) {

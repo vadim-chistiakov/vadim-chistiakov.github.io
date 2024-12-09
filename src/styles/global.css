@@ -118,7 +118,7 @@
 html,
 body {
 	min-height: 100%;
-	overflow-x: auto;
+	overflow-x: hidden;
 }
 
 body {
