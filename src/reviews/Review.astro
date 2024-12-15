@@ -28,36 +28,106 @@ await fetchNextPage();
 
 <style>
   .reviews-carousel {
-    display: flex; /* Используем Grid Layout */
-    gap: 1rem; /* Отступы между карточками */
+    display: flex;
+    gap: 1.5rem;
     padding: 1rem;
-    scroll-snap-type: x mandatory; /* Привязка к карточкам при скролле */
-    overflow-x: auto; /* Горизонтальный скролл */
-    align-items: flex-start; /* Выравнивание карточек по верху */
+    scroll-snap-type: x mandatory;
+    overflow-x: auto;
+    align-items: flex-start;
     -webkit-overflow-scrolling: touch;
-    width: 100%; /* Ограничить ширину контейнера */
-  }
-
-  .review-card p {
-    color: #ffffff; /* Черный цвет текста */
+    width: 100%;
+    scroll-behavior: smooth; /* Плавный скроллинг */
   }
 
   .review-card {
-    width: 300px;
+    width: 400px; /* Фиксированная ширина */
+    height: 250px; /* Фиксированная высота */
     padding: 1rem;
-    background: var(--accent-regular); /* Светлый фон для контраста */
+    background: var(--accent-regular);
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Увеличиваем тень для большего объема */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     scroll-snap-align: start;
     flex-shrink: 0;
-    overflow: hidden; /* Избавляемся от случайного выхода контента за границы */
+    overflow: hidden; /* Обрезаем содержимое */
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: transform 0.3s ease-in-out; /* Плавное изменение размера */
+    transform: scale(0.8); /* Начальный размер 0.8 */
   }
 
-  .review-card:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Добавляем эффект при наведении */
-    transform: translateY(-2px); /* Небольшой подъем карточки */
-    transition: all 0.3s ease; /* Анимация перехода */
+  .review-card p {
+    margin: 0;
+    color: #ffffff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 9; /* Ограничение на 3 строки */
+    -webkit-box-orient: vertical;
+    position: relative;
   }
 
+  .review-card p a {
+    color: var(--accent-light);
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .review-card p a:hover {
+    text-decoration: underline;
+  }
+
+  /* Увеличение центральной карточки */
+  .review-card.focused {
+    transform: scale(1); /* Увеличиваем в 1.2 раза */
+  }
 </style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const cards = document.querySelectorAll(".review-card");
+
+    // Функция для обновления класса для фокусной карточки
+    const handleIntersection = (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('focused'); // Добавляем класс увеличения
+        } else {
+          entry.target.classList.remove('focused'); // Убираем класс уменьшения
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, {
+      root: null, // Проверяем относительно окна просмотра
+      rootMargin: '0px',
+      threshold: 0.5 // 50% карточки должно быть видно для фокуса
+    });
+
+    // Наблюдаем за всеми карточками
+    cards.forEach(card => observer.observe(card));
+  });
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const cards = document.querySelectorAll('.review-card');
+
+    cards.forEach((card) => {
+      const paragraph = card.querySelector('p');
+
+      // Проверяем, превышает ли текст доступную высоту
+      if (paragraph.scrollHeight > paragraph.clientHeight) {
+        const readMoreLink = document.createElement('a');
+        readMoreLink.href = "https://example.com/reviews"; // URL всех отзывов
+        readMoreLink.className = 'read-more';
+        readMoreLink.textContent = ' Читать далее';
+        
+        // Вставляем ссылку в конец текста
+        paragraph.appendChild(readMoreLink);
+      }
+    });
+  });
+</script>
 

@@ -1,0 +1,133 @@
+---
+import CallToAction from './CallToAction.astro';
+import Icon from './Icon.astro';
+---
+
+<div class="container">
+    <div class="cell">
+        <img src="/assets/junior.jpeg" alt="Junior" class="image">
+        <h5>Junior</h5>
+            <p class="text">
+                - Поддержка автора<br>
+                - Доступ в закрытый телеграм канал<br>
+                - Материалы для подготовки к iOS интервью
+            </p>
+        <CallToAction href="https://boosty.to/chistiakov/purchase/2463032?ssource=DIRECT&share=subscription_link", fontSize="var(--text-lg)">
+            150 ₽
+            <Icon icon="boosty-logo" size="1em" />
+        </CallToAction>
+    </div>
+    <div class="cell">    
+        <img src="/assets/middle.jpeg" alt="Middle" class="image">
+        <h5>Middle</h5>
+        <p class="text">
+            - Плюшки предыдущего уровня +<br>
+            - Уникальный контент<br>
+            - Все уроки курса по iOS<br>
+            - Доступ в канал с алгоритмическими задачами
+        </p>
+        <CallToAction href="https://boosty.to/chistiakov/purchase/2467564?ssource=DIRECT&share=subscription_link", fontSize="var(--text-lg)">
+            300 ₽
+            <Icon icon="boosty-logo" size="1em" />
+        </CallToAction>
+    </div>
+    <div class="cell">
+        <img src="/assets/senior.png" alt="Image 3" class="image">
+        <h5>Senior</h5>
+        <p class="text">
+            - Плюшки предыдущего уровня +<br>
+            - Mobile System design разборы для подготовки к big-tech<br>
+            - Algo Mock интервью сессии<br>
+            - Разборы тестовых заданий на валютные удаленки
+        </p>  
+        <CallToAction href="https://boosty.to/chistiakov/purchase/2754607?ssource=DIRECT&share=subscription_link", fontSize="var(--text-lg)">
+            500 ₽
+            <Icon icon="boosty-logo" size="1em" />
+        </CallToAction>
+    </div>
+    <div class="cell">
+        <img src="https://images.boosty.to/image/c3934a07-c2f4-4f68-ab69-4584f63f3aa6?change_time=1719304927&croped=1&mh=300&mw=480" alt="Image 3" class="image">
+        <h5>Menti</h5>
+        <p class="text">
+            - Плюшки предыдущего уровня +<br>
+            - Часовая консультация на любую тему<br>
+            - Помощь с резюме, составлением роадмапа<br>
+            - Поддержка в телеграм
+        </p>
+        <CallToAction href="https://boosty.to/chistiakov/purchase/2761834?ssource=DIRECT&share=subscription_link", fontSize="var(--text-lg)" >
+            15.000 ₽
+            <Icon icon="boosty-logo" size="1em" />
+        </CallToAction>
+    </div>
+</div>
+
+<style>
+
+.container {
+    display: flex; /* Используем Flexbox для горизонтального расположения */
+    justify-content: space-between; /* Расставляем ячейки с равным расстоянием */
+    gap: 1rem; /* Отступы между ячейками */
+    width: 100%; /* Устанавливаем ширину контейнера */
+    align-items: flex-start;
+    padding-top: 1rem;
+}
+
+.cell {
+  width: 25%; /* Каждая ячейка занимает 30% ширины контейнера */
+  min-width: 300px;
+  height: 650px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column; /* Элементы внутри ячейки располагаются вертикально */
+  justify-content: space-between; Располагаем элементы по вертикали, чтобы кнопка была внизу */
+}
+
+.image {
+  width: 100%; /* Картинка на всю ширину ячейки */
+  height: auto; /* Сохраняем пропорции изображения */
+  border-radius: 8px; /* Закругляем углы картинки */
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-800);
+  color: var(--gray-300);
+  background: var(--gradient-subtle);
+}
+
+h5 {
+  margin: 1rem 0; /* Отступы вокруг заголовка */
+}
+
+.text {
+  margin-top: 1rem 0; /* Отступ сверху для разделения с картинкой */
+  text-align: left;
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 2;
+  color: color: #fff; /* Цвет текста кнопки */
+  flex-grow: 1; /* Текст растягивается, занимая оставшееся пространство */
+}
+
+.button {
+  padding: 0.5rem 1rem; /* Отступы внутри кнопки */
+  background-color: #007BFF; /* Цвет фона кнопки */
+  color: #fff; /* Цвет текста кнопки */
+  border: none;
+  border-radius: 4px; /* Закругляем углы кнопки */
+  cursor: pointer; /* Курсор в виде руки */
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #0056b3; /* Цвет кнопки при наведении */
+}
+
+/* Медиазапрос для мобильных устройств */
+@media (max-width: 1200px) {
+  .container {
+    overflow-x: auto; /* Включаем горизонтальный скролл только на мобильных устройствах */
+    -webkit-overflow-scrolling: touch; /* Для плавного скролла на iOS */
+    flex-wrap: nowrap; /* Ячейки будут располагаться в одну строку */
+    gap: 0.5rem; /* Меньшие отступы между ячейками на мобильных */
+  }
+}
+
+</style>

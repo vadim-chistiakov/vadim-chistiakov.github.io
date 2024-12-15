@@ -7,6 +7,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 // Component Imports
 import CallToAction from '../components/CallToAction.astro';
 import Grid from '../components/Grid.astro';
+import Tier from '../components/Tier.astro';
 import Hero from '../components/Hero.astro';
 import Icon from '../components/Icon.astro';
 import Pill from '../components/Pill.astro';
@@ -16,6 +17,7 @@ import Reviews from '../reviews/Review.astro';
 // Page section components
 import ContactCTA from '../components/ContactCTA.astro';
 import Skills from '../components/Skills.astro';
+import Review from '../reviews/Review.astro';
 
 // Content Fetching: List 5 most recent services
 const projects = (await getCollection('services'))
@@ -151,6 +153,23 @@ function shuffleArray(array) {
 				</div>
 			</section>	
 		</main>
+		<main class="wrapper stack">
+			<section class="section with-background bg-community">
+				<header class="section-header">
+					<h3>Сообщество мобильных разработчиков</h3>
+				</header>
+			</section>
+			<section>
+				<h5>
+					Через Boosty ты можешь вступить в сообщество. 
+				</h5>
+				<h5>
+					Оно поможет тебе в карьерном развитии и получении офферов.
+				</h5>
+				<Tier />
+			</section>
+				
+		</main>
 		<ContactCTA />
 	</div>
 </BaseLayout>
@@ -229,6 +248,9 @@ function shuffleArray(array) {
 
 	.with-background.bg-variant::before {
 		--hero-bg: var(--bg-image-subtle-1);
+	}
+	.with-background.bg-community::before {
+		--hero-bg: var(--bg-image-subtle-2);
 	}
 
 	.section-header {

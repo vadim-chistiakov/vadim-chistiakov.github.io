@@ -1,12 +1,13 @@
 ---
 interface Props {
 	href: string;
+	fontSize?: string;  // Добавим опцию для передаваемого font-size
 }
 
-const { href } = Astro.props;
+const { href, fontSize } = Astro.props;
 ---
 
-<a href={href}><slot /></a>
+<a href={href} style={{ fontSize: fontSize || 'var(--text-xl)' }}><slot /></a>
 
 <style>
 	a {
@@ -24,6 +25,7 @@ const { href } = Astro.props;
 		background: var(--gradient-accent-orange);
 		box-shadow: var(--shadow-md);
 		white-space: nowrap;
+		font-size: var(--font-size, var(--text-xl)); /* Используем переменную font-size */
 	}
 
 	@media (min-width: 20em) {
@@ -50,7 +52,7 @@ const { href } = Astro.props;
 	@media (min-width: 50em) {
 		a {
 			padding: 1.125rem 2.5rem;
-			font-size: var(--text-xl);
+			font-size: var(--font-size, var(--text-xl)); /* Используем переменную font-size */
 		}
 	}
 </style>
