@@ -13,41 +13,17 @@ import Icon from '../components/Icon.astro';
 import Pill from '../components/Pill.astro';
 import ServicePreview from '../components/ServicePreview.astro';
 import Reviews from '../reviews/Review.astro';
+import Carousel from '../components/Carousel.astro';
 
 // Page section components
 import ContactCTA from '../components/ContactCTA.astro';
 import Skills from '../components/Skills.astro';
 import Review from '../reviews/Review.astro';
+import Companies from '../components/Companies.astro';
 
 // Content Fetching: List 5 most recent services
 const projects = (await getCollection('services'))
 	.sort((a, b) => a.data.publishDate.valueOf() - b.data.publishDate.valueOf())
-
-// Компании в которые я помог устроится
-const companies = [
-	'Сбербанк', 
-	'Сбер-Бизнес',
-	'ВТБ',
-	'Яндекс-Pay',
-	'Яндекс-Market',
-	'Яндекс-GO',
-	'VK-Видео',
-	'Дзен',
-	'Альфа Банк',
-	'Совкомбанк',
-	'Метрополитен',
-	'Meta',
-	'Rutube',
-	'Лэтуаль'
-]
-
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const randomIndex = Math.floor(Math.random() * (i + 1)); // Случайный индекс от 0 до i
-    [array[i], array[randomIndex]] = [array[randomIndex], array[i]]; // Меняем местами элементы
-  }
-  return array;
-}
 
 // Full Astro Component Syntax:
 // https://docs.astro.build/basics/astro-components/
@@ -136,23 +112,15 @@ function shuffleArray(array) {
 			</section>
 		</main>
 		<main class="wrapper stack">
-			<section class="section with-background bg-variant">
+			<section class="section with-background bg-community">
 				<header class="section-header">
 					<h3>Куда получали офферы менти?</h3>
 				</header>
-				<div class="gallery">
-					<Grid variant="small">
-						{
-							shuffleArray(companies).map((brand) => (
-								<li class="mention-card">
-									<p>{brand}</p>
-								</li>
-							))
-						}
-					</Grid>	
-				</div>
 			</section>	
+			<Companies />
+
 		</main>
+		
 		<main class="wrapper stack">
 			<section class="section with-background bg-community">
 				<header class="section-header">
@@ -168,7 +136,6 @@ function shuffleArray(array) {
 				</h5>
 				<Tier />
 			</section>
-				
 		</main>
 		<ContactCTA />
 	</div>
