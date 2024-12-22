@@ -8,13 +8,14 @@ interface Props {
 
 const {
 	title = 'Vadim Chistiakov: Mentorship',
-	description = 'The personal site of Vadim Chistiakov',
+	description = 'The personal website of Vadim Chistiakov',
 } = Astro.props;
 ---
 
 <meta charset="UTF-8" />
 <meta name="description" property="og:description" content={description} />
 <meta name="viewport" content="width=device-width" />
+<meta property="og:image" content="public/assets/portrait.jpg" />
 <meta name="generator" content={Astro.generator} />
 <title>{title}</title>
 
