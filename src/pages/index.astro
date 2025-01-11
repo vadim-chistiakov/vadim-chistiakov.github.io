@@ -14,6 +14,7 @@ import Pill from '../components/Pill.astro';
 import ServicePreview from '../components/ServicePreview.astro';
 import Reviews from '../reviews/Review.astro';
 import Carousel from '../components/Carousel.astro';
+import Chats from '../components/Chats.astro';
 
 // Page section components
 import ContactCTA from '../components/ContactCTA.astro';
@@ -136,6 +137,20 @@ const projects = (await getCollection('services'))
 					Оно поможет тебе в карьерном развитии и получении офферов.
 				</h5>
 				<Tier />
+			</section>
+		</main>
+
+		<main class="wrapper stack">
+			<section class="section with-background bg-community">
+				<header class="section-header">
+					<h3>Чаты сообщества</h3>
+				</header>
+			</section>
+			<section>
+				<h5>
+					Подписчикам доступны чаты по разным тематикам. 
+				</h5>
+				<Chats />
 			</section>
 		</main>
 		<ContactCTA />

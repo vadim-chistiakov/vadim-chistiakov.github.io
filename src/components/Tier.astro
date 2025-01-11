@@ -73,10 +73,9 @@ import Icon from './Icon.astro';
 }
 
 .cell {
-  width: 25%; /* Каждая ячейка занимает 30% ширины контейнера */
+  width: 25%; 
   min-width: 300px;
   height: 650px;
-  padding: 1rem;
   display: flex;
   flex-direction: column; /* Элементы внутри ячейки располагаются вертикально */
   justify-content: space-between; Располагаем элементы по вертикали, чтобы кнопка была внизу */
@@ -106,19 +105,7 @@ h5 {
   flex-grow: 1; /* Текст растягивается, занимая оставшееся пространство */
 }
 
-.button {
-  padding: 0.5rem 1rem; /* Отступы внутри кнопки */
-  background-color: #007BFF; /* Цвет фона кнопки */
-  color: #fff; /* Цвет текста кнопки */
-  border: none;
-  border-radius: 4px; /* Закругляем углы кнопки */
-  cursor: pointer; /* Курсор в виде руки */
-  transition: background-color 0.3s ease;
-}
 
-.button:hover {
-  background-color: #0056b3; /* Цвет кнопки при наведении */
-}
 
 /* Медиазапрос для мобильных устройств */
 @media (max-width: 1200px) {

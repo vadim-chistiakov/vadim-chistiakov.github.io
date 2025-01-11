@@ -1,0 +1,146 @@
+---
+// ChatGrid.astro
+import CallToAction from './CallToAction.astro';
+import Icon from './Icon.astro';
+
+// Массив данных для чатов
+const chatData = [
+  {
+    id: 1,
+    title: "Vadim Chistiakov | IT",
+    description: "Рассказываю о программировании и жизни разработчика в Лондоне на Global Talent Visa. Делюсь мыслями, опытом и знаниями. Более 1000 человек нашли этот контент полезным для своего персонального развития. Доступен всем.",
+    icon: "/assets/channel.jpeg", // путь к изображению иконки
+    link: "https://t.me/ios_mobile_developer", // ссылка для кнопки
+    button: "Подписаться на канал"
+  },
+  {
+    id: 2,
+    title: "Growing and developing",
+    description: "Основной чат сообщества. Профессионалы из разных стран и начинающие разработчики делятся опытом в IT индустрии. В нем ты найдешь ответы на вопросы о развитии карьеры разработчика, подготовке к интервью, поиске работы и о многом другом. Вступай в чат, делись своими успехами и не стесняйся задавать вопросы.",
+    icon: "/assets/mainchat.jpeg",
+    link: "https://boosty.to/chistiakov/purchase/2467564?ssource=DIRECT&share=subscription_link",
+    button: "Вступить в чат"
+  },
+  {
+    id: 3,
+    title: "Algo Lounge | Vadim Chistiakov",
+    description: "Чат, где ты найдешь алгоритмические задачи от топовых IT компаний. Если тебе надоело решать тысячи непонятных задач с Leedcode и хотется узнать, что спрашивал условный Яндекс вчера, то тебе точно сюда. Не стоит упускать свой шанс получить опыт работы в бигтехе, даже не попробовав пройти собеседование. ",
+    icon: "/assets/algochat.jpeg",
+    link: "https://boosty.to/chistiakov/purchase/2754607?ssource=DIRECT&share=subscription_link",
+    button: "Вступить в чат"
+  },
+  {
+    id: 4,
+    title: "Global Talent Hub",
+    description: "Когда то и я думал, что виза таланта доступна лишь звездам. Спустя несколько лет я осознал, что талант - это лишь количество приложенных усилий и времени. За несколько лет я помог многим ребятам поверить в свои силы и начать новую жизнь в интересной стране. В чате ты найдешь все, чтобы стать талантом уже в этом году!",
+    icon: "/assets/globaltalentchat.jpeg",
+    link: "https://boosty.to/chistiakov/purchase/2761834?ssource=DIRECT&share=subscription_link",
+    button: "Вступить в чат"
+  },
+];
+---
+<style>
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding-top: 16px;
+  }
+
+  .chat-cell {
+    position: relative;
+    background-color: transparent;
+    color: color: #fff; /* Цвет текста кнопки */
+    border: 1px solid var(--gray-800);
+    box-shadow: var(--shadow-sm);
+    border-radius: 16px;
+    padding: 16px;
+    transition: transform 0.2s;
+
+    display: flex;
+    flex-direction: column; /* Элементы внутри ячейки располагаются вертикально */
+    justify-content: space-between; /*Располагаем элементы по вертикали, чтобы кнопка была внизу */
+  }
+
+  .chat-cell:hover {
+    transform: translateY(-4px);
+  }
+
+  .icon {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #007bff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .description {
+    color: var(--gray-300); /* Цвет текста кнопки */
+    margin: 76px 0 12px 0; /* Отступ сверху для размещения иконки */
+    text-align: justify;3
+    font-weight: bold;
+    font-size: 1rem;
+  }
+
+  .text {
+    margin: 76px 0 12px 0; /* Отступ сверху для размещения иконки */
+    text-align: justify;
+    font-size: 1rem;
+    font-weight: bold;
+    color: color: #fff; /* Цвет текста кнопки */
+    flex-grow: 1; /* Текст растягивается, занимая оставшееся пространство */
+  }
+
+  h5 {
+    position: absolute;
+    margin: 1rem 0;
+    top: 16px;
+    left: 92px;
+  }
+
+  .buttonContainer {
+    width: 100%;
+    display: flex;
+    position: center;
+    justify-content: center; /* Горизонтальное выравнивание по центру */
+    align-items: center;
+  }
+
+  /* Медиа-запрос для мобильных устройств */
+  @media (max-width: 768px) {
+    .grid-container {
+      grid-template-columns: 1fr; /* Одна колонка для мобильных устройств */
+    }
+  }
+</style>
+
+<div class="grid-container">
+  {chatData.map((chat) => (
+    <div class="chat-cell" key={chat.id}>
+        <div class="header">
+            <div class="icon">
+                <img src={chat.icon} alt="Иконка чата" />
+            </div>
+            <h5>{chat.title}</h5>
+      </div>
+      <div class="text">{chat.description}</div>
+      <div class="buttonContainer">
+        <CallToAction href={chat.link}, fontSize="var(--text-lg)">
+            {chat.button}
+        </CallToAction>
+     </div>  
+    </div>
+  ))}
+</div>
