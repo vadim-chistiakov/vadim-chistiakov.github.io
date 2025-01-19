@@ -1,6 +1,6 @@
 ---
 title: Консультация
-price: 7.000₽/час
+price: 8.000₽/час
 publishDate: 2018-03-04 00:00:00
 img: /assets/mentor-1.png
 img_alt: Консультация 
