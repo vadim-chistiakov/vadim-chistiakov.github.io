@@ -5,7 +5,7 @@ img: /assets/mentor-5.jpg
 img_alt: A bright pink sheet of paper used to wrap flowers curves in front of rich blue background
 description: |
   Оплата возможна в любой валюте и крипте
-price: 8.000₽/час 
+price: 10.000₽/интервью
 tags:
   - Теория
   - Лайф-кодинг
