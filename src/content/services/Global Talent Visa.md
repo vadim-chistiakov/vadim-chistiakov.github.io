@@ -5,7 +5,7 @@ img: /assets/london-uk.jpg
 img_alt: Global Talent Visa
 description: |
   Оплата возможна в любой валюте и крипте
-price: от 8.000₽/час 
+price: от 10.000₽/час 
 tags:
   - Эмиграция 
   - Великобритания
