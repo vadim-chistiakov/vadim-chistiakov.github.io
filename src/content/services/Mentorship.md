@@ -55,7 +55,7 @@ tags:
 ---
 
 ### Полезное
-- [**Отзывы на менторство**](https://reviews.it-mentors.ru/reviews?id=241413594)
+- [**Отзывы на менторство**](https://personal.it-mentors.ru/integrations/mentor-reviews/241413594)
 - [**Основные паттерны на менторстве**](https://t.me/ios_mobile_developer/233)
 - [**Менторство - результаты**](https://t.me/ios_mobile_developer/235)
 - [**Being a good mentor – a developers guide**](https://vadimkravcenko.com/shorts/good-mentor/?utm_source=leadershipintech&utm_medium=newsletter&utm_campaign=being-a-good-mentor)
