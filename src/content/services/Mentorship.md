@@ -1,7 +1,7 @@
 ---
 title: Менторство
 publishDate: 2019-10-02 00:00:00
-img: /assets/mentor-3.jpeg
+img: /assets/oneonone.png
 img_alt: Менторство
 description: |
   Оплата возможна в любой валюте и крипте

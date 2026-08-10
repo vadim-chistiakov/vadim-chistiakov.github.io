@@ -1,7 +1,7 @@
 ---
 title: Mock-интервью
 publishDate: 2020-12-01 00:00:00
-img: /assets/mentor-5.jpg
+img: /assets/lader.png
 img_alt: A bright pink sheet of paper used to wrap flowers curves in front of rich blue background
 description: |
   Оплата возможна в любой валюте и крипте

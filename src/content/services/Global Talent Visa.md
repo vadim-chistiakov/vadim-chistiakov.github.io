@@ -1,7 +1,7 @@
 ---
 title: Global Talent Visa
 publishDate: 2022-03-02 00:00:00
-img: /assets/london-uk.jpg
+img: /assets/gtv.png
 img_alt: Global Talent Visa
 description: |
   Оплата возможна в любой валюте и крипте
