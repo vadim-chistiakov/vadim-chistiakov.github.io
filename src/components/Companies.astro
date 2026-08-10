@@ -3,13 +3,11 @@ import Icon from './Icon.astro';
 import Label from './Label.astro';
 
 const companies = [
-	'sber.svg', 
 	'sberbusiness.svg',
 	'vtbbank.svg',
-	'YandexPay.png',
+	'Yandex.png',
 	'yandexmarket.png',
-	'YandexGo.png',
-	'VKvideo.svg',
+	'VK.png',
 	'dzen.svg',
 	'alphabank.svg',
 	'sovcombank.png',
@@ -22,7 +20,11 @@ const companies = [
   'bumble.png',
   'paypal.png',
   'epam.png',
-  'sberhealth.png'
+  'sberhealth.png',
+  'n26.png',
+  'Revolut.png',
+  'sberbank.png',
+  'WB.png'
 ]
 
 const { scrollDirection = 'left-to-right' } = Astro.props; // Default to left-to-right if not provided
@@ -67,9 +69,7 @@ function shuffleArray(array) {
       display: flex;
       justify-content: center;
       align-items: center;
-      background: var(--accent-regular);
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      background: transparent;
       overflow: hidden; /* Обрезать выходящий контент */
       position: relative;
       padding: 10px;
@@ -143,7 +143,7 @@ function shuffleArray(array) {
       };
   
       // Start the auto-scrolling
-      const interval = setInterval(autoScroll, 20); // Adjust the interval for speed
+      const interval = setInterval(autoScroll, 10); // Adjust the interval for speed
   
       // Cleanup interval when the component is no longer needed (optional)
       window.addEventListener('beforeunload', () => {
