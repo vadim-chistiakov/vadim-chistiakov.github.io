@@ -2,7 +2,7 @@
 title: Консультация
 price: 10.000₽/час
 publishDate: 2018-03-04 00:00:00
-img: /assets/mentor-1.png
+img: /assets/con1.png
 img_alt: Консультация 
 description: |
   Оплата возможна в любой валюте и крипте

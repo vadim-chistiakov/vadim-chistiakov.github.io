@@ -2,7 +2,7 @@
 title: Консалтинг
 price: По договоренности
 publishDate: 2024-03-04 00:00:00
-img: /assets/mentor-6.jpg
+img: /assets/scheme.png
 img_alt: Консультация 
 description: Оплата возможна в любой валюте и крипте
 tags:
