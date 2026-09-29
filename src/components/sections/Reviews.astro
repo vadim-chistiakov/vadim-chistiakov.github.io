@@ -1,0 +1,114 @@
+---
+import Section from '../Section.astro';
+import ReviewCard from '../ReviewCard.astro';
+import { links } from '../../data/siteConfig';
+import { reviews } from '../../data/reviews';
+import type { Lang } from '../../i18n/config';
+import { useTranslations } from '../../i18n/ui';
+
+interface Props {
+	lang?: Lang;
+}
+const { lang = 'ru' } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<Section number={t('reviews.num')} eyebrow={t('reviews.eyebrow')} title={t('reviews.title')}>
+	<p class="lead">
+		{t('reviews.lead.pre')}<a href={links.reviewsChannel} target="_blank" rel="noopener">{t('reviews.lead.channel')}</a>.
+		<a href={links.reviews} target="_blank" rel="noopener">{t('reviews.lead.all')}</a>
+	</p>
+
+	<div class="slider" data-reviews>
+		<ul class="track" tabindex="0" aria-label={t('reviews.title')}>
+			{reviews.map((r) => (
+				<li class="slot">
+					<ReviewCard review={r} lang={lang} />
+				</li>
+			))}
+		</ul>
+		<div class="nav">
+			<button type="button" class="arrow" data-dir="-1" aria-label={t('reviews.prev')}>
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+			</button>
+			<button type="button" class="arrow" data-dir="1" aria-label={t('reviews.next')}>
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+			</button>
+		</div>
+	</div>
+</Section>
+
+<script>
+	document.querySelectorAll<HTMLElement>('[data-reviews]').forEach((root) => {
+		const track = root.querySelector<HTMLElement>('.track')!;
+		root.querySelectorAll<HTMLButtonElement>('.arrow').forEach((btn) =>
+			btn.addEventListener('click', () => {
+				const card = track.querySelector<HTMLElement>('.card');
+				const step = (card?.offsetWidth ?? 320) + 16;
+				track.scrollBy({ left: Number(btn.dataset.dir) * step, behavior: 'smooth' });
+			}),
+		);
+	});
+</script>
+
+<style>
+	.lead {
+		margin-top: 0.75rem;
+		font-size: var(--text-md);
+		color: var(--gray-300);
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 0.75rem;
+	}
+
+	.slider {
+		margin-top: 1.75rem;
+	}
+	.track {
+		list-style: none;
+		margin: 0;
+		padding: 0 0 0.75rem;
+		display: flex;
+		align-items: flex-start;
+		gap: 1rem;
+		overflow-x: auto;
+		scroll-snap-type: x proximity;
+		scrollbar-width: thin;
+		scrollbar-color: var(--line-bright) transparent;
+	}
+	.slot {
+		flex: 0 0 min(22rem, 86vw);
+		scroll-snap-align: start;
+		display: flex;
+	}
+	.slot > :global(.card) {
+		width: 100%;
+	}
+
+	.nav {
+		display: flex;
+		gap: 0.6rem;
+		justify-content: flex-end;
+		margin-top: 0.5rem;
+	}
+	.arrow {
+		display: grid;
+		place-items: center;
+		width: 2.75rem;
+		height: 2.75rem;
+		border-radius: 50%;
+		border: 1px solid var(--line-bright);
+		background: var(--panel);
+		color: #fff;
+		cursor: pointer;
+		transition: border-color var(--theme-transition), background var(--theme-transition);
+	}
+	.arrow:hover,
+	.arrow:focus-visible {
+		border-color: var(--violet);
+	}
+	.arrow svg {
+		width: 1.1rem;
+		height: 1.1rem;
+	}
+</style>

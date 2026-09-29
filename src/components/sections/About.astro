@@ -1,0 +1,198 @@
+---
+import Section from '../Section.astro';
+import { getAboutIntro, getAboutTags, getCareerSteps } from '../../data/career';
+import type { Lang } from '../../i18n/config';
+import { useTranslations } from '../../i18n/ui';
+
+interface Props {
+	lang?: Lang;
+}
+const { lang = 'ru' } = Astro.props;
+const t = useTranslations(lang);
+const aboutIntro = getAboutIntro(lang);
+const aboutTags = getAboutTags(lang);
+const careerSteps = getCareerSteps(lang);
+---
+
+<Section id="about" number={t('about.num')} eyebrow={t('about.eyebrow')} title={t('about.title')}>
+	<div class="intro">
+		<img src="/assets/portrait.jpg" alt={t('about.title')} width="200" height="250" loading="lazy" />
+		<div>
+			<p class="lead">{aboutIntro}</p>
+			<ul class="tags">{aboutTags.map((tag) => <li class="tag">{tag}</li>)}</ul>
+		</div>
+	</div>
+
+	<h3 class="timeline-title">{t('about.timelineTitle')}</h3>
+	<ol class="timeline">
+		{careerSteps.map((s) => (
+			<li class="step">
+				<span class:list={['node', { current: s.current }]}>
+					{s.monogram}
+					<img
+						class="node-logo"
+						src={`/assets/companies/${s.logo}`}
+						alt={s.org}
+						loading="lazy"
+						onerror="this.remove()"
+					/>
+				</span>
+				<div class="step-body">
+					<h4>
+						{s.role} · {s.org}
+						{s.flag && <span class="flag">{s.flag}</span>}
+						{s.current && <span class="now">{t('about.now')}</span>}
+					</h4>
+					{s.note && <p>{s.note}</p>}
+				</div>
+			</li>
+		))}
+	</ol>
+	<p class="note">
+		<a href="https://www.linkedin.com/in/vadim-chistiakov/" target="_blank" rel="noopener">
+			{t('about.note')}
+			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+		</a>
+	</p>
+</Section>
+
+<style>
+	.intro {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1.75rem;
+		margin-top: 2.25rem;
+	}
+	.intro img {
+		width: 160px;
+		height: 200px;
+		object-fit: cover;
+		object-position: top;
+		border-radius: 16px;
+		border: 1px solid var(--line-bright);
+	}
+	.lead {
+		font-size: 0.95rem;
+		line-height: 1.6;
+		color: var(--gray-300);
+	}
+	.tags {
+		list-style: none;
+		margin: 1.1rem 0 0;
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.timeline-title {
+		margin-top: 2.75rem;
+		font-size: 1.25rem;
+	}
+	.timeline {
+		list-style: none;
+		margin: 1.25rem 0 0;
+		padding: 0;
+		position: relative;
+	}
+	.timeline::before {
+		content: '';
+		position: absolute;
+		left: 1.7rem;
+		top: 1.75rem;
+		bottom: 1.75rem;
+		width: 2px;
+		background: rgba(157, 123, 255, 0.28);
+	}
+	.step {
+		display: flex;
+		gap: 1.25rem;
+		align-items: center;
+		padding: 0.75rem 0;
+		position: relative;
+	}
+	.node {
+		position: relative;
+		display: grid;
+		place-items: center;
+		width: 3.4rem;
+		height: 3.4rem;
+		flex-shrink: 0;
+		border-radius: 16px;
+		overflow: hidden;
+		background: linear-gradient(150deg, var(--violet), #6f54e0);
+		color: #0a0b0f;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 0.8rem;
+		box-shadow: 0 0 22px -8px rgba(157, 123, 255, 0.7);
+	}
+	.node.current {
+		background: linear-gradient(150deg, var(--violet-light), var(--cyan));
+		box-shadow: 0 0 26px -6px rgba(84, 224, 199, 0.7);
+	}
+	.node-logo {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		padding: 0.2rem;
+	}
+	/* Logo loaded → drop the gradient tile and hide the monogram fallback */
+	.node:has(.node-logo) {
+		background: none;
+		box-shadow: none;
+		font-size: 0;
+	}
+	.step-body h4 {
+		font-size: 1rem;
+	}
+	.step-body p {
+		margin-top: 0.2rem;
+		font-size: 0.8rem;
+		color: var(--gray-400);
+	}
+	.flag {
+		font-weight: 400;
+	}
+	.now {
+		font-weight: 500;
+		font-size: 0.7rem;
+		color: var(--cyan);
+	}
+	.note {
+		margin-top: 1.25rem;
+		font-size: 0.9rem;
+	}
+	.note a {
+		color: var(--gray-300);
+		text-decoration: underline;
+		text-decoration-color: rgba(157, 123, 255, 0.4);
+		text-underline-offset: 0.25em;
+	}
+	.note a:hover,
+	.note a:focus-visible {
+		color: #fff;
+		text-decoration-color: var(--violet);
+	}
+	.note svg {
+		width: 0.85em;
+		height: 0.85em;
+		margin-left: 0.15em;
+		vertical-align: -0.05em;
+		color: var(--violet);
+	}
+
+	@media (min-width: 50em) {
+		.intro {
+			grid-template-columns: 200px 1fr;
+			gap: 2.5rem;
+			align-items: start;
+		}
+		.intro img {
+			width: 200px;
+			height: 250px;
+		}
+	}
+</style>

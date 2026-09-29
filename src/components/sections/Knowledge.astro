@@ -1,0 +1,167 @@
+---
+import Section from '../Section.astro';
+import { links } from '../../data/siteConfig';
+import { getKnowledgeStats, getKnowledgeTopics, knowledgeCompanies } from '../../data/knowledgeBase';
+import type { Lang } from '../../i18n/config';
+import { useTranslations } from '../../i18n/ui';
+
+interface Props {
+	lang?: Lang;
+}
+const { lang = 'ru' } = Astro.props;
+const t = useTranslations(lang);
+const knowledgeStats = getKnowledgeStats(lang);
+const knowledgeTopics = getKnowledgeTopics(lang);
+---
+
+<Section id="knowledge" number={t('knowledge.num')} eyebrow={t('knowledge.eyebrow')} title={t('knowledge.title')}>
+	<p class="lead">
+		<a class="lead-link" href={links.knowledgeBase} target="_blank" rel="noopener">
+			{t('knowledge.lead.pre')}<span class="accent">{t('knowledge.lead.accent')}</span>.
+			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+		</a>
+	</p>
+
+	<div class="marks">
+		{knowledgeCompanies.map((c) => (
+			<a class="mark" href={c.link} target="_blank" rel="noopener" title={c.name}>
+				{c.logo ? <img src={`/assets/companies/${c.logo}`} alt={c.name} loading="lazy" onerror="this.replaceWith(this.alt)" style={c.zoom ? `transform: scale(${c.zoom})` : undefined} /> : c.name}
+			</a>
+		))}
+		<span class="mark dots">···</span>
+	</div>
+
+	<div class="stats">
+		{knowledgeStats.map((s) => (
+			<div class="panel stat">
+				<div class="stat-v">{s.value}</div>
+				<div class="stat-l">{s.label}</div>
+				{s.note && <p class="stat-note">{s.note}</p>}
+			</div>
+		))}
+	</div>
+
+	<ul class="topics">
+		{knowledgeTopics.map((t) => <li class="tag">{t}</li>)}
+	</ul>
+</Section>
+
+<style>
+	.lead {
+		margin-top: 0.75rem;
+		font-size: var(--text-md);
+		color: var(--gray-300);
+	}
+	.lead-link {
+		color: inherit;
+		text-decoration: underline;
+		text-decoration-color: rgba(157, 123, 255, 0.4);
+		text-underline-offset: 0.25em;
+		transition: text-decoration-color var(--theme-transition);
+	}
+	.lead-link:hover,
+	.lead-link:focus-visible {
+		color: inherit;
+		text-decoration-color: var(--violet);
+	}
+	.lead-link svg {
+		width: 0.85em;
+		height: 0.85em;
+		margin-left: 0.15em;
+		vertical-align: -0.05em;
+		color: var(--violet);
+	}
+	.accent {
+		color: var(--violet);
+	}
+
+	.marks {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		margin-top: 2rem;
+	}
+	.mark {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 8.5rem;
+		height: 4.5rem;
+		padding: 0.6rem 1rem;
+		border-radius: 14px;
+		background: var(--panel);
+		border: 1px solid var(--line);
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 0.9rem;
+		color: var(--gray-200);
+		cursor: pointer;
+		transition:
+			border-color var(--theme-transition),
+			transform var(--theme-transition);
+	}
+	a.mark:hover,
+	a.mark:focus-visible {
+		border-color: var(--violet);
+		transform: translateY(-2px);
+	}
+	.mark img {
+		max-width: 100%;
+		max-height: 100%;
+		object-fit: contain;
+	}
+	.mark.dots {
+		width: 4.5rem;
+		font-family: var(--font-body);
+		font-size: 1.1rem;
+		color: var(--gray-400);
+		cursor: default;
+	}
+
+	.stats {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1rem;
+		margin-top: 1rem;
+	}
+	.stat {
+		padding: 1.6rem;
+	}
+	.stat-v {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 1.75rem;
+		letter-spacing: -0.03em;
+		color: #fff;
+	}
+	.stat-l {
+		margin-top: 0.5rem;
+		font-weight: 600;
+		font-size: 0.875rem;
+	}
+	.stat-note {
+		margin-top: 0.5rem;
+		font-size: 0.78rem;
+		color: var(--gray-400);
+		line-height: 1.5;
+	}
+
+	.topics {
+		list-style: none;
+		margin: 1rem 0 0;
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+	.topics .tag {
+		font-size: 0.8125rem;
+		padding: 0.5rem 0.9rem;
+	}
+
+	@media (min-width: 50em) {
+		.stats {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+</style>

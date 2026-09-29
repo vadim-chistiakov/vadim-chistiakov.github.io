@@ -1,0 +1,145 @@
+---
+import { companies } from '../../data/companies';
+import { getReviewIds } from '../../data/reviews';
+import type { Lang } from '../../i18n/config';
+import { useTranslations } from '../../i18n/ui';
+
+interface Props {
+	lang?: Lang;
+}
+const { lang = 'ru' } = Astro.props;
+const t = useTranslations(lang);
+
+// duplicate for a seamless CSS marquee
+const withReviews = companies.map((c) => ({ ...c, reviewIds: getReviewIds(c.name) }));
+const loop = [...withReviews, ...withReviews];
+---
+
+<section class="companies" aria-label={t('companies.title')}>
+	<div class="wrapper">
+		<div class="head">
+			<p class="label">{t('companies.title')}</p>
+			<p class="hint">{t('companies.hint')}</p>
+		</div>
+	</div>
+	<div class="marquee">
+		<div class="track">
+			{loop.map((c, i) => {
+				const dup = i >= companies.length;
+				const img = <img src={`/assets/companies/${c.logo}`} alt={c.name} loading="lazy" />;
+				const clickable = c.reviewIds.length > 0 || !!c.offerImage;
+				const kind = c.offerImage ? t('reviewModal.offer') : t('reviewModal.title').toLowerCase();
+				return clickable ? (
+					<button
+						type="button"
+						class="logo clickable"
+						data-review-ids={c.offerImage ? undefined : c.reviewIds.join(',')}
+						data-offer-image={c.offerImage ? `/assets/Offers/${c.offerImage}` : undefined}
+						data-review-title={`${c.name} — ${kind}`}
+						aria-label={`${t('offers.modal.card')}: ${c.name}`}
+						aria-hidden={dup ? 'true' : undefined}
+						tabindex={dup ? -1 : undefined}
+					>
+						{img}
+					</button>
+				) : (
+					<span class="logo" aria-hidden={dup ? 'true' : undefined}>{img}</span>
+				);
+			})}
+		</div>
+	</div>
+</section>
+
+<style>
+	.companies {
+		border-block: 1px solid var(--line);
+		padding-block: 4rem;
+	}
+	.head {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 0.5rem;
+		margin-bottom: 1.5rem;
+	}
+	.hint {
+		font-family: var(--font-body);
+		font-weight: 500;
+		font-size: 0.75rem;
+		color: var(--cyan);
+	}
+
+	.marquee {
+		overflow: hidden;
+		-webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+		mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+	}
+	.track {
+		display: flex;
+		align-items: center;
+		gap: 3rem;
+		width: max-content;
+		animation: marquee 55s linear infinite;
+	}
+	.marquee:hover .track {
+		animation-play-state: paused;
+	}
+	@keyframes marquee {
+		to {
+			transform: translateX(-50%);
+		}
+	}
+
+	/* fixed-size tile so every logo — regardless of its own aspect ratio or
+	   built-in whitespace — reads as evenly spaced along the strip */
+	.logo {
+		flex-shrink: 0;
+		width: 9.5rem;
+		height: 4.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		opacity: 0.9;
+		transition: opacity var(--theme-transition);
+	}
+	.logo.clickable {
+		padding: 0;
+		border: 0;
+		background: none;
+		cursor: pointer;
+	}
+	.logo.clickable:hover,
+	.logo.clickable:focus-visible {
+		opacity: 1;
+	}
+	.logo.clickable:focus-visible {
+		outline: 2px solid var(--violet);
+		outline-offset: 4px;
+		border-radius: 8px;
+	}
+	.logo img {
+		max-width: 100%;
+		max-height: 100%;
+		object-fit: contain;
+		border-radius: 8px; /* logos that ship on a solid background (Blacklane, Окко, Instories) */
+	}
+
+	@media (min-width: 50em) {
+		.track {
+			gap: 4rem;
+		}
+		.logo {
+			width: 11rem;
+			height: 5.5rem;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.marquee {
+			overflow-x: auto;
+		}
+		.track {
+			animation: none;
+		}
+	}
+</style>

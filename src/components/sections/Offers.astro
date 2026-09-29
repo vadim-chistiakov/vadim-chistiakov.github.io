@@ -1,0 +1,358 @@
+---
+import Section from '../Section.astro';
+import { getOfferSummary, getOffers, getChartPoints, fx } from '../../data/offers';
+import { getReviewIds } from '../../data/reviews';
+import type { Lang } from '../../i18n/config';
+import { useTranslations } from '../../i18n/ui';
+
+interface Props {
+	lang?: Lang;
+}
+const { lang = 'ru' } = Astro.props;
+const t = useTranslations(lang);
+const offerSummary = getOfferSummary(lang);
+const offers = getOffers(lang).map((o) => ({ ...o, reviewIds: getReviewIds(o.company) }));
+
+const accentColor: Record<string, string> = {
+	violet: '#a97bff',
+	cyan: '#54e0c7',
+	pink: '#ff5c7a',
+	yellow: '#ffd23f',
+	blue: '#5b9dff',
+	green: '#46d17a',
+};
+
+// ---- compensation chart: every offer plotted by its (normalised) compensation ----
+const chartPoints = getChartPoints(offers);
+const Y_MAX = 1250; // thousands of ₽/month at the top of the plot
+const yTicks = [0, 250, 500, 750, 1000];
+const padX = 5; // % left/right padding inside the plot
+const n = chartPoints.length;
+const plotted = chartPoints.map((p, i) => ({
+	...p,
+	x: padX + (n === 1 ? 0.5 : i / (n - 1)) * (100 - padX * 2),
+	y: (p.rubK / Y_MAX) * 100,
+}));
+const linePoints = plotted.map((p) => `${p.x.toFixed(2)},${(100 - p.y).toFixed(2)}`).join(' ');
+const areaPoints = `${plotted[0].x.toFixed(2)},100 ${linePoints} ${plotted[n - 1].x.toFixed(2)},100`;
+const fmtK = (v: number) => (v >= 1000 ? `${v / 1000}M` : `${v}k`);
+const chartNote = t('offers.chartNote')
+	.replace('{eur}', String(fx.EUR))
+	.replace('{usd}', String(fx.USD))
+	.replace('{gbp}', String(fx.GBP));
+---
+
+<Section id="offers" number={t('offers.num')} eyebrow={t('offers.eyebrow')} title={t('offers.title')} bg="cyan">
+	<div class="panel chart">
+		<div class="chart-scroll">
+			<div class="plot" role="img" aria-label={t('offers.title')}>
+				<div class="y-axis" aria-hidden="true">
+					{yTicks.map((v) => (
+						<span style={`bottom:${(v / Y_MAX) * 100}%`}>{v === 0 ? '0' : fmtK(v)}</span>
+					))}
+				</div>
+				<div class="area">
+					{yTicks.map((v) => <i class="hline" style={`bottom:${(v / Y_MAX) * 100}%`}></i>)}
+					<svg class="curve" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+						<defs>
+							<linearGradient id="chart-fill" x1="0" y1="0" x2="0" y2="1">
+								<stop offset="0" stop-color="#9d7bff" stop-opacity="0.28"></stop>
+								<stop offset="1" stop-color="#9d7bff" stop-opacity="0"></stop>
+							</linearGradient>
+						</defs>
+						<polygon points={areaPoints} fill="url(#chart-fill)"></polygon>
+						<polyline points={linePoints} fill="none" stroke="#9d7bff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" style="vector-effect: non-scaling-stroke"></polyline>
+					</svg>
+					{plotted.map((p) => (
+						<div
+							class="pt"
+							style={`left:${p.x}%;bottom:${p.y}%;--c:${accentColor[p.accent]}`}
+							title={`${p.company} — ${p.label} (≈ ${Math.round(p.rubK)}k ₽/${lang === 'en' ? 'mo' : 'мес'})`}
+						>
+							<span class="pt-tag">
+								{p.logo ? (
+									<img src={`/assets/companies/${p.logo}`} alt={p.company} loading="lazy" />
+								) : (
+									<span class="pt-name">{p.company}</span>
+								)}
+								<b>{p.label}</b>
+							</span>
+							<span class="pt-dot"></span>
+						</div>
+					))}
+				</div>
+			</div>
+		</div>
+		<p class="label chart-note">{chartNote}</p>
+	</div>
+
+	<div class="panel summary">
+		{offerSummary.map((s) => (
+			<div>
+				<div class="sum-v">{s.value}</div>
+				<div class="label">{s.label}</div>
+			</div>
+		))}
+	</div>
+
+	<div class="offers">
+		{offers.map((o) => (
+			<article class:list={['panel offer', { wide: o.company === 'Альфа-Банк', clickable: o.reviewIds.length > 0 }]}>
+				<div class="offer-logo">
+					{o.logo ? (
+						<img src={`/assets/companies/${o.logo}`} alt={o.company} loading="lazy" />
+					) : (
+						<span>{o.company}</span>
+					)}
+				</div>
+				<div class="offer-amount" style={`color:${accentColor[o.accent ?? 'violet']}`}>
+					{o.amount}<span class="offer-period">{o.period}</span>
+				</div>
+				<p class="offer-meta label">{o.geo}</p>
+				{o.note && <p class="offer-note">{o.note}</p>}
+				{o.reviewIds.length > 0 && (
+					<>
+						<svg class="offer-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+						<button
+							type="button"
+							class="offer-hit"
+							data-review-ids={o.reviewIds.join(',')}
+							data-review-title={`${o.company} — ${o.amount} ${o.period}`}
+							aria-label={`${t('offers.modal.card')}: ${o.company}`}
+						></button>
+					</>
+				)}
+			</article>
+		))}
+	</div>
+
+	<p class="more">
+		<svg viewBox="0 0 24 24" fill="none" stroke="var(--violet)" stroke-width="2" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="2"></rect><path d="M8 8V6a4 4 0 0 1 8 0v2"></path></svg>
+		{t('offers.more')}
+	</p>
+</Section>
+
+<style>
+	.chart {
+		margin-top: 2rem;
+		padding: 1.75rem 1.5rem 1.25rem;
+	}
+	.chart-scroll {
+		overflow-x: auto;
+		padding-bottom: 0.5rem;
+	}
+	.plot {
+		position: relative;
+		min-width: 52rem;
+		height: 22rem;
+		padding-left: 3rem;
+	}
+	.y-axis {
+		position: absolute;
+		left: 0;
+		top: 0;
+		bottom: 0;
+		width: 2.5rem;
+	}
+	.y-axis span {
+		position: absolute;
+		right: 0;
+		transform: translateY(50%);
+		font-size: 0.7rem;
+		color: var(--gray-500);
+	}
+	.area {
+		position: relative;
+		height: 100%;
+	}
+	.hline {
+		position: absolute;
+		left: 0;
+		right: 0;
+		height: 1px;
+		background: rgba(255, 255, 255, 0.06);
+	}
+	.curve {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		overflow: visible;
+	}
+	.pt {
+		position: absolute;
+		width: 0;
+		height: 0;
+	}
+	.pt-dot {
+		position: absolute;
+		left: -0.32rem;
+		top: -0.32rem;
+		width: 0.64rem;
+		height: 0.64rem;
+		border-radius: 999px;
+		background: var(--bg);
+		border: 2px solid var(--c);
+		box-shadow: 0 0 12px -2px var(--c);
+	}
+	.pt-tag {
+		position: absolute;
+		bottom: 0.9rem;
+		left: 0;
+		transform: translateX(-50%);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.15rem;
+		white-space: nowrap;
+	}
+	.pt-tag img {
+		height: 1.6rem;
+		max-width: 4.6rem;
+		object-fit: contain;
+	}
+	.pt-name {
+		font-size: 0.65rem;
+		font-weight: 600;
+		color: var(--gray-300);
+	}
+	.pt-tag b {
+		font-family: var(--font-display);
+		font-size: 0.72rem;
+		font-weight: 700;
+		color: var(--c);
+	}
+	.chart-note {
+		margin-top: 0.75rem;
+	}
+
+	.summary {
+		margin-top: 1rem;
+		padding: 1.75rem 2rem;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1.25rem;
+		border-color: rgba(84, 224, 199, 0.22);
+	}
+	.sum-v {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 1.6rem;
+		letter-spacing: -0.03em;
+		color: #fff;
+	}
+	.sum-v + .label {
+		margin-top: 0.3rem;
+	}
+
+	.offers {
+		margin-top: 1rem;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1rem;
+	}
+	.offer {
+		padding: 1.25rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.65rem;
+	}
+	.offer-logo {
+		height: 2rem;
+		display: flex;
+		align-items: center;
+	}
+	.offer-logo img {
+		max-width: 7rem;
+		max-height: 100%;
+		object-fit: contain;
+	}
+	.offer-logo span {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 0.85rem;
+		color: var(--gray-300);
+	}
+	.offer-amount {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 1.25rem;
+		letter-spacing: -0.02em;
+	}
+	.offer-period {
+		font-family: var(--font-body);
+		font-weight: 400;
+		font-size: 0.65rem;
+		color: var(--gray-400);
+		margin-left: 0.3rem;
+	}
+	.offer-note {
+		font-size: 0.8rem;
+		color: var(--gray-300);
+		line-height: 1.5;
+	}
+
+	.more {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		margin-top: 1.25rem;
+		font-size: 0.9rem;
+		color: var(--gray-200);
+	}
+	.more svg {
+		width: 1.1rem;
+		height: 1.1rem;
+	}
+
+	@media (min-width: 50em) {
+		.summary {
+			grid-template-columns: repeat(4, 1fr);
+		}
+		.offers {
+			grid-template-columns: repeat(4, 1fr);
+		}
+		.offer.wide {
+			grid-column: span 2;
+		}
+	}
+	.offer {
+		position: relative;
+	}
+	.offer.clickable {
+		transition:
+			border-color var(--theme-transition),
+			transform var(--theme-transition);
+	}
+	.offer.clickable:hover,
+	.offer.clickable:focus-within {
+		border-color: var(--line-bright);
+		transform: translateY(-2px);
+	}
+	.offer-hit {
+		position: absolute;
+		inset: 0;
+		border: 0;
+		padding: 0;
+		background: transparent;
+		border-radius: inherit;
+		cursor: pointer;
+	}
+	.offer-hit:focus-visible {
+		outline: 2px solid var(--violet);
+		outline-offset: 2px;
+	}
+	.offer-arrow {
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
+		width: 1rem;
+		height: 1rem;
+		color: var(--gray-500);
+		transition: color var(--theme-transition);
+		pointer-events: none;
+	}
+	.offer.clickable:hover .offer-arrow {
+		color: var(--violet);
+	}
+</style>

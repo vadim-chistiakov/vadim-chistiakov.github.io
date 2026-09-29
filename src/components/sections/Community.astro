@@ -1,0 +1,85 @@
+---
+import Section from '../Section.astro';
+import { getCommunityFeatures } from '../../data/community';
+import type { Lang } from '../../i18n/config';
+import { useTranslations } from '../../i18n/ui';
+
+interface Props {
+	lang?: Lang;
+}
+const { lang = 'ru' } = Astro.props;
+const t = useTranslations(lang);
+const communityFeatures = getCommunityFeatures(lang);
+
+const icons: Record<string, string> = {
+	globe:
+		'<circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"></path>',
+	users:
+		'<circle cx="9" cy="8" r="3"></circle><circle cx="17" cy="10" r="2.5"></circle><path d="M4 19c0-3 2-5 5-5s5 2 5 5M15 19c0-2 1-3.5 3-3.5"></path>',
+	chat: '<path d="M4 5h16v11H8l-4 4z"></path>',
+	star: '<polygon points="12 3 15 9 21 9.5 16.5 14 18 20 12 17 6 20 7.5 14 3 9.5 9 9"></polygon>',
+	shield: '<path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"></path>',
+};
+---
+
+<Section id="community" number={t('community.num')} eyebrow={t('community.eyebrow')} title={t('community.title')}>
+	<ul class="features">
+			{communityFeatures.map((f) => (
+				<li class="feature">
+					<span class="ic" aria-hidden="true">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" set:html={icons[f.icon]} />
+					</span>
+					<div>
+						<h4>{f.title}</h4>
+						<p>{f.text}</p>
+					</div>
+				</li>
+			))}
+	</ul>
+</Section>
+
+<style>
+	.features {
+		list-style: none;
+		margin: 2.5rem 0 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1.6rem 3.5rem;
+	}
+	.feature {
+		display: flex;
+		gap: 1rem;
+		align-items: flex-start;
+	}
+	.ic {
+		display: grid;
+		place-items: center;
+		width: 2.4rem;
+		height: 2.4rem;
+		flex-shrink: 0;
+		border-radius: 0.65rem;
+		border: 1px solid var(--line-bright);
+		color: var(--violet);
+		background: rgba(157, 123, 255, 0.06);
+	}
+	.ic svg {
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+	.feature h4 {
+		font-size: 0.95rem;
+	}
+	.feature p {
+		margin-top: 0.25rem;
+		font-size: 0.85rem;
+		color: var(--gray-300);
+		line-height: 1.55;
+	}
+
+	@media (min-width: 50em) {
+		.features {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+</style>

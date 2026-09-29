@@ -1,0 +1,60 @@
+---
+interface Props {
+	id?: string;
+	/** Section number, e.g. "01" */
+	number?: string;
+	eyebrow?: string;
+	title?: string;
+	/** Subtle background tint */
+	bg?: 'default' | 'violet' | 'cyan';
+	class?: string;
+}
+
+const { id, number, eyebrow, title, bg = 'default', class: className } = Astro.props;
+---
+
+<section id={id} class:list={['section', `bg-${bg}`, className]}>
+	<div class="wrapper">
+		{
+			(number || eyebrow) && (
+				<p class="eyebrow section-eyebrow">
+					{number && <span>{number}</span>}
+					{number && eyebrow && <span class="dash">—</span>}
+					{eyebrow}
+				</p>
+			)
+		}
+		{title && <h2 class="section-title">{title}</h2>}
+		<slot />
+	</div>
+</section>
+
+<style>
+	.section {
+		padding-block: clamp(3.5rem, 8vw, 5.75rem);
+		position: relative;
+		scroll-margin-top: 4.5rem;
+	}
+
+	.bg-violet {
+		background: linear-gradient(180deg, rgba(157, 123, 255, 0.05), transparent 42%);
+	}
+	.bg-cyan {
+		background: linear-gradient(180deg, rgba(84, 224, 199, 0.05), transparent 42%);
+	}
+
+	.section-eyebrow {
+		display: flex;
+		gap: 0.6em;
+		align-items: baseline;
+	}
+	.section-eyebrow .dash {
+		opacity: 0.6;
+	}
+
+	.section-title {
+		margin-top: 0.85rem;
+		font-size: clamp(1.6rem, 4vw, 1.9375rem);
+		max-width: 22ch;
+	}
+</style>

@@ -1,0 +1,44 @@
+---
+import Section from '../Section.astro';
+import Accordion from '../Accordion.astro';
+import { getFaq } from '../../data/faq';
+import type { Lang } from '../../i18n/config';
+import { useTranslations } from '../../i18n/ui';
+
+interface Props {
+	lang?: Lang;
+}
+const { lang = 'ru' } = Astro.props;
+const t = useTranslations(lang);
+const faq = getFaq(lang);
+---
+
+<Section id="faq" number={t('faq.num')} eyebrow={t('faq.eyebrow')} title={t('faq.title')} bg="cyan">
+	<div class="list">
+		{faq.map((item, i) => (
+			<Accordion summary={item.q} open={i === 0}>
+				<p>{item.a}</p>
+			</Accordion>
+		))}
+	</div>
+</Section>
+
+<style>
+	.list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		margin-top: 2rem;
+	}
+	.list :global(.accordion-body p) {
+		font-size: 0.9rem;
+		color: var(--gray-300);
+		line-height: 1.6;
+	}
+
+	@media (min-width: 60em) {
+		.list {
+			max-width: 46rem;
+		}
+	}
+</style>

@@ -1,132 +1,106 @@
-/* Global variables */
+/* ============================================================
+   The IT Community — design system (dark-only, neon)
+   Fonts: Unbounded (display) + Manrope (body). Full Cyrillic.
+   ============================================================ */
+
 :root {
-	/* Colors */
-	--gray-0: #090b11;
-	--gray-50: #141925;
-	--gray-100: #283044;
-	--gray-200: #3d4663;
-	--gray-300: #505d84;
-	--gray-400: #6474a2;
-	--gray-500: #8490b5;
-	--gray-600: #a3acc8;
-	--gray-700: #c3cadb;
-	--gray-800: #e3e6ee;
-	--gray-900: #f3f4f7;
-	--gray-999-basis: 0, 0%, 100%;
-	--gray-999_40: hsla(var(--gray-999-basis), 0.4);
-	--gray-999: #ffffff;
+	color-scheme: dark;
 
-	--accent-light: #c561f6;
-	--accent-regular: #7611a6;
-	--accent-dark: #1c0056;
-	--accent-overlay: hsla(280, 89%, 67%, 0.33);
-	--accent-subtle-overlay: var(--accent-overlay);
-	--accent-text-over: var(--gray-999);
+	/* Neutral ramp — 0 = brightest text, 999 = page background */
+	--gray-0: #ffffff;
+	--gray-50: #f3f4f7;
+	--gray-100: #e8e9ef;
+	--gray-200: #c7cbd4;
+	--gray-300: #9aa0ac;
+	--gray-400: #7f8593;
+	--gray-500: #5f6470;
+	--gray-600: #3a3f4c;
+	--gray-700: #262a34;
+	--gray-800: #1c1f27;
+	--gray-900: #14161d;
+	--gray-999-basis: 228, 22%, 5%;
+	--gray-999_40: rgba(16, 18, 24, 0.55);
+	--gray-999: #0a0b0f;
 
-	--link-color: var(--accent-regular);
+	/* Accents — violet primary, cyan secondary */
+	--violet: #9d7bff;
+	--violet-light: #b9a1ff;
+	--violet-dark: #7b5cff;
+	--cyan: #54e0c7;
+
+	--accent-light: var(--violet-light);
+	--accent-regular: var(--violet);
+	--accent-dark: var(--violet-dark);
+	--accent-overlay: rgba(157, 123, 255, 0.22);
+	--accent-subtle-overlay: rgba(157, 123, 255, 0.1);
+	--accent-text-over: #0a0b0f;
+
+	--link-color: var(--violet);
+
+	/* Surfaces */
+	--bg: var(--gray-999);
+	--panel: linear-gradient(180deg, #101218, #0c0e13);
+	--panel-solid: #101218;
+	--line: rgba(255, 255, 255, 0.08);
+	--line-bright: rgba(157, 123, 255, 0.3);
 
 	/* Gradients */
-	--gradient-stop-1: var(--accent-light);
-	--gradient-stop-2: var(--accent-regular);
-	--gradient-stop-3: var(--accent-dark);
-	--gradient-subtle: linear-gradient(150deg, var(--gray-900) 19%, var(--gray-999) 150%);
-	--gradient-accent: linear-gradient(
-		150deg,
-		var(--gradient-stop-1),
-		var(--gradient-stop-2),
-		var(--gradient-stop-3)
-	);
-	--gradient-accent-orange: linear-gradient(
-		150deg,
-		#ca7879,
-		var(--accent-regular),
-		var(--accent-dark)
-	);
-	--gradient-stroke: linear-gradient(180deg, var(--gray-900), var(--gray-700));
+	--gradient-stop-1: var(--violet-light);
+	--gradient-stop-2: var(--violet);
+	--gradient-stop-3: var(--violet-dark);
+	--gradient-accent: linear-gradient(120deg, var(--violet-light), var(--violet), var(--violet-dark));
+	--gradient-accent-orange: linear-gradient(180deg, var(--violet-light), var(--violet));
+	--gradient-brand: linear-gradient(120deg, var(--violet), var(--cyan));
+	--gradient-subtle: var(--panel);
+	--gradient-stroke: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03));
 
-	/* Shadows */
-	--shadow-sm: 0px 6px 3px rgba(9, 11, 17, 0.01), 0px 4px 2px rgba(9, 11, 17, 0.01),
-		0px 2px 2px rgba(9, 11, 17, 0.02), 0px 0px 1px rgba(9, 11, 17, 0.03);
-	--shadow-md: 0px 28px 11px rgba(9, 11, 17, 0.01), 0px 16px 10px rgba(9, 11, 17, 0.03),
-		0px 7px 7px rgba(9, 11, 17, 0.05), 0px 2px 4px rgba(9, 11, 17, 0.06);
-	--shadow-lg: 0px 62px 25px rgba(9, 11, 17, 0.01), 0px 35px 21px rgba(9, 11, 17, 0.05),
-		0px 16px 16px rgba(9, 11, 17, 0.1), 0px 4px 9px rgba(9, 11, 17, 0.12);
+	/* Shadows + glow */
+	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+	--shadow-md: 0 20px 50px -22px rgba(0, 0, 0, 0.65);
+	--shadow-lg: 0 44px 110px -45px rgba(0, 0, 0, 0.75);
+	--glow: 0 0 44px -10px rgba(157, 123, 255, 0.6);
+	--glow-lg: 0 0 120px -35px rgba(157, 123, 255, 0.6);
 
-	/* Text Sizes */
+	/* Type scale */
 	--text-sm: 0.875rem;
 	--text-base: 1rem;
 	--text-md: 1.125rem;
 	--text-lg: 1.25rem;
-	--text-xl: 1.625rem;
-	--text-2xl: 2.125rem;
-	--text-3xl: 2.625rem;
-	--text-4xl: 3.5rem;
-	--text-5xl: 4.5rem;
+	--text-xl: 1.5rem;
+	--text-2xl: 1.9375rem;
+	--text-3xl: 2.375rem;
+	--text-4xl: 2.875rem;
+	--text-5xl: 3.5rem;
 
 	/* Fonts */
 	--font-system: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
 		Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-	--font-body: 'Public Sans', var(--font-system);
-	--font-brand: Rubik, var(--font-system);
+	--font-body: 'Manrope', var(--font-system);
+	--font-brand: 'Unbounded', var(--font-system);
+	--font-display: var(--font-brand);
 
-	/* Transitions */
-	--theme-transition: 0.2s ease-in-out;
+	--theme-transition: 0.15s ease-in-out;
 }
 
-:root.theme-dark {
-	--gray-0: #ffffff;
-	--gray-50: #f3f4f7;
-	--gray-100: #e3e6ee;
-	--gray-200: #c3cadb;
-	--gray-300: #a3acc8;
-	--gray-400: #8490b5;
-	--gray-500: #6474a2;
-	--gray-600: #505d84;
-	--gray-700: #3d4663;
-	--gray-800: #283044;
-	--gray-900: #141925;
-	--gray-999-basis: 225, 31%, 5%;
-	--gray-999: #090b11;
-
-	--accent-light: #1c0056;
-	--accent-regular: #7611a6;
-	--accent-dark: #c561f6;
-	--accent-overlay: hsla(280, 89%, 67%, 0.33);
-	--accent-subtle-overlay: hsla(281, 81%, 36%, 0.33);
-	--accent-text-over: var(--gray-0);
-
-	--link-color: var(--accent-dark);
-
-	--gradient-stop-1: #4c11c6;
-	--gradient-subtle: linear-gradient(150deg, var(--gray-900) 19%, var(--gray-999) 81%);
-	--gradient-accent-orange: linear-gradient(
-		150deg,
-		#ca7879,
-		var(--accent-regular),
-		var(--accent-light)
-	);
-	--gradient-stroke: linear-gradient(180deg, var(--gray-600), var(--gray-800));
-
-	--shadow-sm: 0px 6px 3px rgba(255, 255, 255, 0.01), 0px 4px 2px rgba(255, 255, 255, 0.01),
-		0px 2px 2px rgba(255, 255, 255, 0.02), 0px 0px 1px rgba(255, 255, 255, 0.03);
-	--shadow-md: 0px 28px 11px rgba(255, 255, 255, 0.01), 0px 16px 10px rgba(255, 255, 255, 0.03),
-		0px 7px 7px rgba(255, 255, 255, 0.05), 0px 2px 4px rgba(255, 255, 255, 0.06);
-	--shadow-lg: 0px 62px 25px rgba(255, 255, 255, 0.01), 0px 35px 21px rgba(255, 255, 255, 0.05),
-		0px 16px 16px rgba(255, 255, 255, 0.1), 0px 4px 9px rgba(255, 255, 255, 0.12);
+html {
+	scroll-behavior: smooth;
+	/* clip horizontal overflow at the root only — NOT on body, which would
+	   otherwise become an accidental scroll container and break
+	   `position: sticky` on descendants like the nav bar. */
+	overflow-x: hidden;
 }
 
 html,
 body {
 	min-height: 100%;
-	overflow-x: hidden;
 }
 
 body {
-	background-color: var(--gray-999);
-	color: var(--gray-200);
+	background-color: var(--bg);
+	color: var(--gray-100);
 	font-family: var(--font-body);
 	-webkit-font-smoothing: antialiased;
-	line-height: 1.5;
+	line-height: 1.6;
 }
 
 *,
@@ -143,6 +117,15 @@ img {
 
 a {
 	color: var(--link-color);
+	text-decoration: none;
+}
+a:hover {
+	color: var(--violet-light);
+}
+
+::selection {
+	background: rgba(157, 123, 255, 0.3);
+	color: #fff;
 }
 
 h1,
@@ -150,33 +133,132 @@ h2,
 h3,
 h4,
 h5 {
-	line-height: 1.1;
-	font-family: var(--font-brand);
-	font-weight: 600;
-	color: var(--gray-100);
+	line-height: 1.12;
+	font-weight: 700;
+	color: var(--gray-0);
+	letter-spacing: -0.015em;
+}
+
+h1,
+h2 {
+	font-family: var(--font-display);
+	letter-spacing: -0.03em;
+}
+
+h3,
+h4,
+h5 {
+	font-family: var(--font-body);
 }
 
 h1 {
-	font-size: var(--text-5xl);
-}
-
-h2 {
 	font-size: var(--text-4xl);
 }
-
-h3 {
+h2 {
 	font-size: var(--text-3xl);
 }
-
-h4 {
-	font-size: var(--text-2xl);
-}
-
-h5 {
+h3 {
 	font-size: var(--text-xl);
 }
+h4 {
+	font-size: var(--text-lg);
+}
+h5 {
+	font-size: var(--text-md);
+}
 
-/* Utilities */
+/* ===================== Shared primitives ===================== */
+
+.eyebrow {
+	font-family: var(--font-body);
+	font-weight: 600;
+	font-size: 0.75rem;
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
+	color: var(--cyan);
+}
+
+/* small label / caption style (replaces the old "mono" role) */
+.label {
+	font-family: var(--font-body);
+	font-weight: 500;
+	font-size: 0.75rem;
+	letter-spacing: 0.02em;
+	color: var(--gray-400);
+}
+
+.panel {
+	background: var(--panel);
+	border: 1px solid var(--line);
+	border-radius: 18px;
+}
+
+.tag {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4em;
+	font-family: var(--font-body);
+	font-weight: 500;
+	font-size: 0.75rem;
+	letter-spacing: 0.02em;
+	color: var(--gray-200);
+	padding: 0.3rem 0.7rem;
+	border: 1px solid var(--line);
+	border-radius: 999px;
+	white-space: nowrap;
+}
+
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.6em;
+	font-family: var(--font-body);
+	font-weight: 700;
+	font-size: var(--text-base);
+	line-height: 1.1;
+	padding: 0.9rem 1.5rem;
+	border-radius: 999px;
+	border: 1px solid transparent;
+	cursor: pointer;
+	text-decoration: none;
+	transition:
+		transform var(--theme-transition),
+		box-shadow var(--theme-transition),
+		border-color var(--theme-transition),
+		color var(--theme-transition);
+}
+.btn-primary {
+	color: var(--accent-text-over);
+	background: linear-gradient(180deg, var(--violet-light), var(--violet));
+	box-shadow: var(--glow);
+}
+.btn-primary:hover {
+	transform: translateY(-2px);
+	color: var(--accent-text-over);
+}
+.btn-ghost {
+	color: var(--gray-100);
+	border-color: rgba(255, 255, 255, 0.16);
+	background: rgba(255, 255, 255, 0.02);
+}
+.btn-ghost:hover {
+	border-color: var(--line-bright);
+	color: #fff;
+}
+
+.brand-gradient {
+	background: var(--gradient-brand);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+/* ===================== Utilities ===================== */
+
+[hidden] {
+	display: none !important;
+}
 
 .sr-only {
 	position: absolute;
@@ -192,9 +274,14 @@ h5 {
 
 .wrapper {
 	width: 100%;
-	max-width: 83rem;
+	max-width: 78rem;
 	margin-inline: auto;
 	padding-inline: 1.5rem;
+}
+@media (min-width: 50em) {
+	.wrapper {
+		padding-inline: 2.5rem;
+	}
 }
 
 .stack {
@@ -251,5 +338,16 @@ h5 {
 	}
 	.lg\:gap-48 {
 		gap: 12rem;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
 	}
 }

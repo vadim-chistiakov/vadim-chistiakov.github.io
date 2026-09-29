@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/sections/Hero.astro';
+import Community from '../../components/sections/Community.astro';
+import Tiers from '../../components/sections/Tiers.astro';
+import Knowledge from '../../components/sections/Knowledge.astro';
+import Offers from '../../components/sections/Offers.astro';
+import About from '../../components/sections/About.astro';
+import Mentorship from '../../components/sections/Mentorship.astro';
+import Reviews from '../../components/sections/Reviews.astro';
+import Companies from '../../components/sections/Companies.astro';
+import ReviewModal from '../../components/ReviewModal.astro';
+import Faq from '../../components/sections/Faq.astro';
+import FinalCta from '../../components/sections/FinalCta.astro';
+
+const lang = 'en' as const;
+---
+
+<BaseLayout lang={lang}>
+	<Hero lang={lang} />
+	<Community lang={lang} />
+	<Tiers lang={lang} />
+	<Knowledge lang={lang} />
+	<Offers lang={lang} />
+	<Companies lang={lang} />
+	<About lang={lang} />
+	<Mentorship lang={lang} />
+	<Reviews lang={lang} />
+	<Faq lang={lang} />
+	<FinalCta lang={lang} />
+	<ReviewModal lang={lang} />
+</BaseLayout>

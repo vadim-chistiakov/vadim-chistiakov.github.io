@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MentorshipPage from '../../components/MentorshipPage.astro';
+
+const lang = 'en' as const;
+---
+
+<BaseLayout
+	lang={lang}
+	title="Mentorship & consultations — The IT Community"
+	description="1:1 work: mentorship guiding you to an offer (3 pricing options, paid from your new salary) and one-off consultations with booking and payment on the site."
+>
+	<MentorshipPage lang={lang} />
+</BaseLayout>
