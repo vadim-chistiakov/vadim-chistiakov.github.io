@@ -1,0 +1,124 @@
+---
+import type { Review, ReviewCurrency } from '../data/reviews';
+import type { Lang } from '../i18n/config';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+	review: Review;
+	lang?: Lang;
+	/** show the full text (no "Read more" clamp) */
+	expanded?: boolean;
+}
+const { review: r, lang = 'ru', expanded = false } = Astro.props;
+const t = useTranslations(lang);
+
+const currencySign: Record<ReviewCurrency, string> = { RUB: '₽', EUR: '€', USD: '$', GBP: '£' };
+const nf = new Intl.NumberFormat(lang === 'en' ? 'en-GB' : 'ru-RU');
+const formatOffer = (o: { amount: number; currency: ReviewCurrency }) =>
+	`${nf.format(o.amount).replace(/ | /g, ' ')}${currencySign[o.currency]} gross`;
+
+const formatDays = (n: number) => {
+	if (lang === 'en') return `${n} ${n === 1 ? 'day' : 'days'}`;
+	const m10 = n % 10;
+	const m100 = n % 100;
+	const word = m10 === 1 && m100 !== 11 ? 'день' : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? 'дня' : 'дней';
+	return `${n} ${word}`;
+};
+
+/** Longer reviews are clamped with a "Read more" toggle. */
+const LONG = 650;
+const long = !expanded && r.text.length > LONG;
+const term = r.durationDays !== null ? formatDays(r.durationDays) : null;
+const offerText = r.offer ? formatOffer(r.offer) : null;
+const paragraphs = r.text.split(/\n\n+/);
+---
+
+<div class:list={['panel', 'card', { long }]}>
+	<p class="author">
+		{t('reviews.author')}: <a href={`https://t.me/${r.author}`} target="_blank" rel="noopener">@{r.author}</a>
+	</p>
+	{(term || offerText) && (
+		<p class="facts">
+			{term && <span>{t('reviews.term')}: {term}</span>}
+			{offerText && <span>{t('reviews.offer')}: {offerText}</span>}
+		</p>
+	)}
+	{r.tag && <span class="tag">{r.tag}</span>}
+	<div class="text">
+		{paragraphs.map((para) => <p>{para}</p>)}
+	</div>
+	{long && (
+		<button
+			type="button"
+			class="btn btn-ghost more"
+			data-more
+			data-more-label={t('reviews.more')}
+			data-less-label={t('reviews.less')}
+			aria-expanded="false"
+		>
+			{t('reviews.more')}
+		</button>
+	)}
+</div>
+
+<script>
+	document.addEventListener('click', (e) => {
+		const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-more]');
+		if (!btn) return;
+		const card = btn.closest('.card')!;
+		const open = card.classList.toggle('open');
+		btn.setAttribute('aria-expanded', String(open));
+		btn.textContent = open ? btn.dataset.lessLabel! : btn.dataset.moreLabel!;
+	});
+</script>
+
+<style>
+	.card {
+		padding: 1.5rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.9rem;
+	}
+	.author {
+		margin: 0;
+		color: var(--gray-400);
+		font-size: 0.95rem;
+	}
+	.author a {
+		color: var(--violet);
+	}
+	.facts {
+		margin: 0;
+		display: grid;
+		gap: 0.2rem;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 0.95rem;
+		color: #fff;
+	}
+	.card .tag {
+		align-self: flex-start;
+	}
+	.text {
+		display: grid;
+		gap: 0.8rem;
+		font-size: 0.9rem;
+		line-height: 1.6;
+		color: var(--gray-300);
+	}
+	.text p {
+		margin: 0;
+		white-space: pre-line;
+	}
+
+	/* long reviews: clamped until "Read more" */
+	.card.long:not(.open) .text {
+		max-height: 24rem;
+		overflow: hidden;
+		-webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent);
+		mask-image: linear-gradient(to bottom, #000 70%, transparent);
+	}
+	.more {
+		align-self: flex-start;
+	}
+</style>

@@ -1,0 +1,244 @@
+---
+import Section from '../Section.astro';
+import Accordion from '../Accordion.astro';
+import { getTiers } from '../../data/tiers';
+import { getChats } from '../../data/chats';
+import type { Lang } from '../../i18n/config';
+import { useTranslations } from '../../i18n/ui';
+
+interface Props {
+	lang?: Lang;
+}
+const { lang = 'ru' } = Astro.props;
+const t = useTranslations(lang);
+const tiers = getTiers(lang);
+const chats = getChats(lang);
+
+const beginner = tiers.filter((x) => x.group === 'beginner');
+const advanced = tiers.filter((x) => x.group === 'advanced');
+---
+
+<Section id="tiers" number={t('tiers.num')} eyebrow={t('tiers.eyebrow')} title={t('tiers.title')} bg="violet">
+	<div class="tier-groups">
+		<div class="tier-group">
+			<p class="group-label">{t('tiers.group.beginner')}</p>
+			<div class="tier-grid">
+				{beginner.map((tier) => (
+					<article class:list={['panel tier', { featured: tier.featured }]}>
+						<img src={tier.image} alt={tier.imageAlt} loading="lazy" />
+						<div class="tier-body">
+							<div class="tier-head">
+								<h3>{tier.name}</h3>
+								<span class="tier-price">{tier.price}<span class="per">{t('tiers.perMonth')}</span></span>
+							</div>
+							<ul>{tier.perks.map((p) => <li>{p}</li>)}</ul>
+							<a class:list={['btn', tier.featured ? 'btn-primary' : 'btn-ghost']} href={tier.url} target="_blank" rel="noopener">{t('tiers.subscribe')}</a>
+						</div>
+					</article>
+				))}
+			</div>
+		</div>
+		<div class="tier-group">
+			<p class="group-label">{t('tiers.group.advanced')}</p>
+			<div class="tier-grid">
+				{advanced.map((tier) => (
+					<article class:list={['panel tier', { featured: tier.featured }]}>
+						<img src={tier.image} alt={tier.imageAlt} loading="lazy" />
+						<div class="tier-body">
+							<div class="tier-head">
+								<h3>{tier.name}</h3>
+								<span class="tier-price">{tier.price}<span class="per">{t('tiers.perMonth')}</span></span>
+							</div>
+							<ul>{tier.perks.map((p) => <li>{p}</li>)}</ul>
+							<a class:list={['btn', tier.featured ? 'btn-primary' : 'btn-ghost']} href={tier.url} target="_blank" rel="noopener">{t('tiers.subscribe')}</a>
+						</div>
+					</article>
+				))}
+			</div>
+		</div>
+	</div>
+
+	<Accordion summary={t('chats.summary')} hint={t('chats.hint')} meta={t('chats.meta')} open>
+		<div class="chats">
+			{chats.map((c) => (
+				<a class="chat" href={c.url} target="_blank" rel="noopener">
+					<img class="chat-icon" src={c.image} alt={c.title} loading="lazy" />
+					<span class="chat-body">
+						<span class="chat-title">{c.title}</span>
+						<span class="chat-desc">{c.description}</span>
+					</span>
+				</a>
+			))}
+		</div>
+	</Accordion>
+</Section>
+
+<style>
+	.tier-groups {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 0 1rem;
+		margin-bottom: 1.75rem;
+	}
+	.tier-group {
+		display: flex;
+		flex-direction: column;
+	}
+	.tier-group .tier-grid {
+		flex: 1;
+	}
+	.group-label {
+		font-family: var(--font-body);
+		font-weight: 600;
+		font-size: 0.75rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--cyan);
+		margin: 2.5rem 0 1rem;
+	}
+
+	.tier-grid {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: 1fr;
+	}
+	.tier + .tier {
+		margin-top: 0;
+	}
+
+	.tier {
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+	}
+	.tier.featured {
+		border-color: var(--line-bright);
+		box-shadow: 0 0 50px -20px rgba(157, 123, 255, 0.5);
+	}
+	.tier > img {
+		width: 100%;
+		aspect-ratio: 16 / 10;
+		object-fit: cover;
+		display: block;
+		border-bottom: 1px solid var(--line);
+	}
+	.tier-body {
+		padding: 1.4rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.9rem;
+		flex-grow: 1;
+	}
+	.tier-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 0.5rem;
+	}
+	.tier-head h3 {
+		font-size: 1.2rem;
+	}
+	.tier-price {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 1.2rem;
+		letter-spacing: -0.02em;
+		color: #fff;
+		white-space: nowrap;
+	}
+	.tier-price .per {
+		font-family: var(--font-body);
+		font-weight: 400;
+		font-size: 0.75rem;
+		color: var(--gray-400);
+	}
+	.tier-body ul {
+		margin: 0;
+		padding-left: 1.1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.45rem;
+	}
+	.tier-body li {
+		font-size: 0.8125rem;
+		color: var(--gray-300);
+		line-height: 1.5;
+	}
+	.tier-body .btn {
+		margin-top: auto;
+		font-size: 0.8125rem;
+		padding: 0.65rem 1rem;
+	}
+
+	.chats {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 0.75rem;
+	}
+	.chat {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.75rem;
+		padding: 0.9rem;
+		border: 1px solid var(--line);
+		border-radius: 12px;
+		text-decoration: none;
+		transition: border-color var(--theme-transition);
+	}
+	.chat:hover {
+		border-color: var(--line-bright);
+	}
+	.chat-icon {
+		width: 2.75rem;
+		height: 2.75rem;
+		flex-shrink: 0;
+		border-radius: 999px;
+		object-fit: cover;
+		border: 1px solid var(--line);
+	}
+	.chat-body {
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+	}
+	.chat-title {
+		display: block;
+		font-weight: 600;
+		font-size: 0.875rem;
+		color: var(--gray-100);
+	}
+	.chat-desc {
+		display: block;
+		margin-top: 0.25rem;
+		font-size: 0.75rem;
+		color: var(--gray-400);
+		line-height: 1.5;
+	}
+
+	@media (min-width: 50em) {
+		.tier-grid {
+			grid-template-columns: 1fr 1fr;
+		}
+		.chats {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	/* desktop: all four tiers in a single row (two groups side by side) */
+	@media (min-width: 64em) {
+		.tier-groups {
+			grid-template-columns: 1fr 1fr;
+			gap: 0 1.25rem;
+		}
+		.tier-groups .tier-grid {
+			gap: 1.25rem;
+		}
+		.tier-body {
+			padding: 1.15rem;
+		}
+		.tier-head h3,
+		.tier-price {
+			font-size: 1.05rem;
+		}
+	}
+</style>

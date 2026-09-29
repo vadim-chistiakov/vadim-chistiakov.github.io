@@ -1,48 +1,67 @@
 ---
 import '../styles/global.css';
+import type { Lang } from '../i18n/config';
+import { stripLang, localizePath } from '../i18n/config';
 
 interface Props {
 	title?: string | undefined;
 	description?: string | undefined;
+	lang?: Lang;
 }
 
-const {
-	title = 'Vadim Chistiakov: Mentorship',
-	description = 'The personal website of Vadim Chistiakov',
-} = Astro.props;
+const { lang = 'ru' } = Astro.props;
+
+const defaults = {
+	ru: {
+		title: 'The IT Community — сообщество iOS разработчиков',
+		description:
+			'The IT Community — сообщество мобильных разработчиков со всего мира. Закрытые чаты, база знаний, менторство и консультации.',
+	},
+	en: {
+		title: 'The IT Community — an iOS developer community',
+		description:
+			'The IT Community — a community of mobile developers from around the world. Private chats, a knowledge base, mentorship and consultations.',
+	},
+};
+
+const title = Astro.props.title ?? defaults[lang].title;
+const description = Astro.props.description ?? defaults[lang].description;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/assets/main_cover.webp', Astro.site);
+
+const logical = stripLang(Astro.url.pathname);
+const alternates: { hreflang: string; href: string }[] = [
+	{ hreflang: 'ru', href: new URL(localizePath(logical, 'ru'), Astro.site).href },
+	{ hreflang: 'en', href: new URL(localizePath(logical, 'en'), Astro.site).href },
+	{ hreflang: 'x-default', href: new URL(localizePath(logical, 'ru'), Astro.site).href },
+];
 ---
 
 <meta charset="UTF-8" />
-<meta name="description" property="og:description" content={description} />
 <meta name="viewport" content="width=device-width" />
-<meta property="og:image" content="public/assets/portrait.jpg" />
 <meta name="generator" content={Astro.generator} />
 <title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="The IT Community" />
+<meta property="og:locale" content={lang === 'en' ? 'en_US' : 'ru_RU'} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
 
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
-	href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,700;1,400&family=Rubik:wght@500;600&display=swap"
+	href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap"
 	rel="stylesheet"
 />
-<script is:inline>
-	// This code is inlined in the head to make dark mode instant & blocking.
-	const getThemePreference = () => {
-		if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-			return localStorage.getItem('theme');
-		}
-		return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-	};
-	const isDark = getThemePreference() === 'dark';
-	document.documentElement.classList[isDark ? 'add' : 'remove']('theme-dark');
-
-	if (typeof localStorage !== 'undefined') {
-		// Watch the document element and persist user preference when it changes.
-		const observer = new MutationObserver(() => {
-			const isDark = document.documentElement.classList.contains('theme-dark');
-			localStorage.setItem('theme', isDark ? 'dark' : 'light');
-		});
-		observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-	}
-</script>

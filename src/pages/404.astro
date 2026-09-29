@@ -1,8 +1,34 @@
 ---
-import Hero from '../components/Hero.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Not Found" description="404 Error — this page was not found">
-	<Hero title="Page Not Found" tagline="Not found" />
+<BaseLayout title="Страница не найдена — The IT Community" description="404 — страница не найдена">
+	<section class="wrapper not-found">
+		<p class="eyebrow">Ошибка 404</p>
+		<h1>Такой страницы нет</h1>
+		<p>Возможно, ссылка устарела. Вернись на главную и найди нужный раздел.</p>
+		<a class="btn btn-primary" href="/">На главную</a>
+	</section>
 </BaseLayout>
+
+<style>
+	.not-found {
+		min-height: 60vh;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: center;
+		gap: 1rem;
+		padding-block: clamp(4rem, 12vw, 8rem);
+	}
+	.not-found h1 {
+		font-size: clamp(2rem, 7vw, 3rem);
+	}
+	.not-found p {
+		color: var(--gray-300);
+		max-width: 40ch;
+	}
+	.not-found .btn {
+		margin-top: 0.75rem;
+	}
+</style>

@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MentorshipPage from '../components/MentorshipPage.astro';
+
+const lang = 'ru' as const;
+---
+
+<BaseLayout
+	lang={lang}
+	title="Менторство и консультации — The IT Community"
+	description="Личная работа 1:1: менторство с доведением до оффера (3 варианта условий, платишь из новой зарплаты) и разовые консультации с записью и оплатой на сайте."
+>
+	<MentorshipPage lang={lang} />
+</BaseLayout>

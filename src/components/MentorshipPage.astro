@@ -1,0 +1,568 @@
+---
+import {
+	getMentorshipPillars,
+	getRoadmapStages,
+	getMentorshipTracks,
+	getMentorshipNotes,
+} from '../data/mentorship';
+import { getServices, calUsername, calOrigin } from '../data/consultations';
+import { links } from '../data/siteConfig';
+import type { Lang } from '../i18n/config';
+import { localizePath } from '../i18n/config';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+	lang?: Lang;
+}
+const { lang = 'ru' } = Astro.props;
+const t = useTranslations(lang);
+
+const pillars = getMentorshipPillars(lang);
+const roadmapStages = getRoadmapStages(lang);
+const tracks = getMentorshipTracks(lang);
+const notes = getMentorshipNotes(lang);
+const services = getServices(lang);
+
+const homeHref = localizePath('/', lang);
+const calLink = calUsername;
+---
+
+<article class="page">
+	<header class="wrapper head">
+		<a class="back" href={`${homeHref}#mentorship`}>
+			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+			{t('m.back')}
+		</a>
+		<p class="eyebrow">{t('m.eyebrow')}</p>
+		<h1>{t('m.title')}</h1>
+		<ul class="head-tags">
+			<li class="tag accent-violet">{t('m.tag.mentorship')}</li>
+			{services.map((svc) => (
+				<li class="tag accent-cyan">{svc.title.toLowerCase()} · {svc.priceShort}</li>
+			))}
+			<li class="tag">{t('m.tag.pay')}</li>
+		</ul>
+		<p class="head-lead">{t('m.lead')}</p>
+	</header>
+
+	<div class="wrapper layout">
+		<div class="body">
+			<h2>{t('m.h.included')}</h2>
+			<ul class="pillars">
+				{pillars.map((p) => (
+					<li><strong>{p.title}</strong> — {p.text}</li>
+				))}
+			</ul>
+
+			<h2>{t('m.h.roadmap')}</h2>
+			<ol class="roadmap">
+				{roadmapStages.map((s, i) => (
+					<li class:list={['panel', { last: i === roadmapStages.length - 1 }]}>
+						<span class="num">{i + 1}</span>
+						<span>{s}</span>
+					</li>
+				))}
+			</ol>
+
+			<h2>{t('m.h.terms')}</h2>
+			<div class="tracks">
+				{tracks.map((track, i) => (
+					<article class:list={['panel track', { mid: i === 1 }]}>
+						<div class="track-head">
+							<strong>{track.title}</strong>
+							<span class="result">{track.result}</span>
+						</div>
+						<p class="for-whom">{track.forWhom}</p>
+						<div class="options">
+							{track.options.map((o, oi) => (
+								<>
+									{oi > 0 && <span class="or">{t('m.or')}</span>}
+									<p class="opt">
+										<b>{o.price}</b> {o.terms}
+										{o.ofOffer && <span class="of-offer">({o.ofOffer})</span>}
+									</p>
+								</>
+							))}
+						</div>
+					</article>
+				))}
+			</div>
+
+			<p class="note-pay">{notes.pay}</p>
+			<p class="note">{notes.split}</p>
+			<p class="note"><span class="vu">{notes.vuTag}</span> {notes.vuText}</p>
+
+			<h2 id="consult">{t('m.h.consult')}</h2>
+			<p>{t('m.consultIntro')}</p>
+			<div class="consult">
+				<div class="panel step">
+					<div class="step-head"><span class="badge cyan">1</span><strong>{t('m.step1')}</strong></div>
+					<div class="cal-embed">
+						<div id="cal-inline" aria-label={t('m.calTitle')}></div>
+						<script is:inline define:vars={{ calLink, calOrigin }}>
+							(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+							Cal("init", { origin: calOrigin });
+							Cal("inline", { elementOrSelector: "#cal-inline", calLink: calLink, layout: "month_view" });
+							Cal("ui", { layout: "month_view", theme: "dark", cssVarsPerTheme: { dark: { "cal-brand": "#9d7bff" } } });
+							Cal("on", {
+								action: "bookingSuccessful",
+								callback: function () {
+									document.querySelectorAll(".pay-btn").forEach(function (el) {
+										el.classList.remove("is-locked");
+										el.removeAttribute("aria-disabled");
+									});
+									var lockedMsg = document.querySelector(".pay-lock .locked-msg");
+									var unlockedMsg = document.querySelector(".pay-lock .unlocked-msg");
+									if (lockedMsg) lockedMsg.hidden = true;
+									if (unlockedMsg) unlockedMsg.hidden = false;
+								},
+							});
+						</script>
+					</div>
+				</div>
+				<div class="panel step">
+					<div class="step-head"><span class="badge violet">2</span><strong>{t('m.step2')}</strong></div>
+					<div class="pay-list">
+						{services.map((svc) => (
+							<div class="pay-row">
+								<div class="pay-meta">
+									<strong>{svc.title}</strong>
+									<span class="label">{svc.duration} · {svc.price}</span>
+								</div>
+								<a
+									class="btn btn-primary pay-btn is-locked"
+									href={svc.payment}
+									target="_blank"
+									rel="noopener"
+									aria-disabled="true"
+									onclick="if (this.classList.contains('is-locked')) return false;"
+								>
+									{t('m.payCta')}
+									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+								</a>
+							</div>
+						))}
+					</div>
+					<p class="step-text pay-lock">
+						<span class="locked-msg">{t('m.payLocked')}</span>
+						<span class="unlocked-msg" hidden>{t('m.payUnlocked')}</span>
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<aside class="panel aside">
+			<p class="eyebrow">{t('m.aside.mentorship')}</p>
+			<p class="aside-price">{t('m.aside.mentorshipPrice')}</p>
+			<p class="label">{t('m.aside.mentorshipUnit')}</p>
+			<p class="aside-text">{t('m.aside.mentorshipText')}</p>
+			<a class="btn btn-primary" href={links.mentorshipBot} target="_blank" rel="noopener">
+				{t('mentorship.cta.bot')}
+				<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.9 4.3 18.7 19c-.2 1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.4-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.6 13 1.8 11.5c-1-.3-1-1 .2-1.5l18.6-7.2c.9-.3 1.6.2 1.3 1.5Z"></path></svg>
+			</a>
+			<div class="hr"></div>
+			<p class="eyebrow">{t('m.aside.consult')}</p>
+			<ul class="aside-svc">
+				{services.map((svc) => (
+					<li><span>{svc.title}</span><span class="label">{svc.duration} · {svc.price}</span></li>
+				))}
+			</ul>
+			<a class="btn btn-ghost" href="#consult">{t('m.aside.consultCta')}</a>
+		</aside>
+	</div>
+</article>
+
+<style>
+	.page {
+		padding-bottom: clamp(3.5rem, 8vw, 5.5rem);
+	}
+	.head {
+		padding-top: clamp(1.75rem, 4vw, 2.75rem);
+		padding-bottom: clamp(1.75rem, 4vw, 2.5rem);
+		border-bottom: 1px solid var(--line);
+	}
+	.back {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-size: 0.8125rem;
+		color: var(--gray-400);
+		margin-bottom: 1.6rem;
+	}
+	.back svg {
+		width: 0.85rem;
+		height: 0.85rem;
+	}
+	.head h1 {
+		margin-top: 0.9rem;
+		font-size: clamp(1.9rem, 6vw, 2.75rem);
+	}
+	.head-tags {
+		list-style: none;
+		margin: 1.4rem 0 0;
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.55rem;
+	}
+	.head-tags .tag {
+		font-size: 0.8125rem;
+		padding: 0.4rem 0.85rem;
+	}
+	.accent-violet {
+		border-color: var(--line-bright);
+		color: #cdbcff;
+	}
+	.accent-cyan {
+		border-color: rgba(84, 224, 199, 0.5);
+		color: #a8f0e4;
+	}
+	.head-lead {
+		margin-top: 1.4rem;
+		max-width: 56ch;
+		font-size: var(--text-md);
+		line-height: 1.6;
+		color: var(--gray-300);
+	}
+
+	.layout {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 3rem;
+		padding-top: clamp(2.5rem, 6vw, 3.25rem);
+	}
+	.body h2 {
+		font-size: 1.25rem;
+		margin: 2.25rem 0 0.9rem;
+	}
+	.body h2:first-child {
+		margin-top: 0;
+	}
+	.body p {
+		color: var(--gray-200);
+		line-height: 1.7;
+	}
+
+	.pillars {
+		margin: 0;
+		padding-left: 1.25rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		color: var(--gray-300);
+		line-height: 1.7;
+	}
+	.pillars strong {
+		color: var(--gray-100);
+	}
+
+	.roadmap {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 0.65rem;
+	}
+	.roadmap li {
+		display: flex;
+		align-items: center;
+		gap: 0.65rem;
+		padding: 0.9rem 1rem;
+		font-weight: 600;
+		font-size: 0.875rem;
+	}
+	.roadmap .num {
+		display: grid;
+		place-items: center;
+		width: 1.5rem;
+		height: 1.5rem;
+		border-radius: 999px;
+		border: 1px solid var(--violet);
+		color: var(--violet);
+		font-family: var(--font-display);
+		font-size: 0.7rem;
+	}
+	.roadmap li.last {
+		border-color: rgba(84, 224, 199, 0.3);
+	}
+	.roadmap li.last .num {
+		border-color: var(--cyan);
+		color: var(--cyan);
+	}
+
+	.tracks {
+		display: flex;
+		flex-direction: column;
+		gap: 0.85rem;
+	}
+	.track {
+		min-width: 0;
+	}
+	.track {
+		padding: 1.25rem 1.4rem;
+	}
+	.track.mid {
+		border-color: var(--line-bright);
+	}
+	.track-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+	.track-head strong {
+		font-size: 0.95rem;
+		color: var(--gray-100);
+	}
+	.result {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 0.95rem;
+		color: var(--cyan);
+	}
+	.for-whom {
+		margin-top: 0.35rem;
+		font-size: 0.85rem;
+		color: var(--gray-400) !important;
+	}
+	.options {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.6rem 1.75rem;
+		margin-top: 0.8rem;
+	}
+	.opt {
+		font-size: 0.875rem;
+		color: var(--gray-300) !important;
+	}
+	.opt b {
+		font-family: var(--font-display);
+		font-weight: 600;
+		color: #fff;
+	}
+	.of-offer {
+		color: var(--gray-500);
+	}
+	.or {
+		font-size: 0.8125rem;
+		color: var(--gray-500);
+	}
+
+	.note-pay {
+		margin-top: 1.4rem;
+		font-style: italic;
+		color: var(--gray-100) !important;
+		border-left: 3px solid var(--violet);
+		padding: 0.75rem 1rem;
+		background: rgba(157, 123, 255, 0.06);
+		border-radius: 0 10px 10px 0;
+	}
+	.note {
+		margin-top: 0.75rem;
+		font-size: 0.875rem;
+		color: var(--gray-400) !important;
+	}
+	.vu {
+		color: var(--violet);
+		font-weight: 600;
+	}
+
+	.consult {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1rem;
+		margin-top: 0.5rem;
+	}
+	.step {
+		padding: 1.4rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.9rem;
+	}
+	.step-head {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+	}
+	.step-head strong {
+		font-size: 0.95rem;
+	}
+	.badge {
+		display: grid;
+		place-items: center;
+		width: 1.4rem;
+		height: 1.4rem;
+		border-radius: 999px;
+		font-size: 0.75rem;
+		font-family: var(--font-display);
+	}
+	.badge.cyan {
+		border: 1px solid var(--cyan);
+		color: var(--cyan);
+	}
+	.badge.violet {
+		border: 1px solid var(--violet);
+		color: var(--violet);
+	}
+	.cal-embed {
+		border-radius: 12px;
+		overflow: hidden;
+		background: var(--panel-solid);
+	}
+	.cal-embed :global(#cal-inline) {
+		width: 100%;
+		min-height: 560px;
+		overflow: auto;
+	}
+	.placeholder {
+		border: 1px dashed rgba(255, 255, 255, 0.16);
+		border-radius: 12px;
+		padding: 2rem;
+		text-align: center;
+	}
+	.price-big {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 1.75rem;
+		color: #fff !important;
+		letter-spacing: -0.02em;
+	}
+	.per {
+		font-family: var(--font-body);
+		font-weight: 400;
+		font-size: 0.8rem;
+		color: var(--gray-400);
+	}
+	.step-text {
+		font-size: 0.8rem;
+		color: var(--gray-400) !important;
+	}
+	.step .btn {
+		margin-top: 0;
+	}
+	.step .btn svg {
+		width: 0.9rem;
+		height: 0.9rem;
+	}
+
+	.pay-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+	.pay-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		flex-wrap: wrap;
+		padding: 0.9rem 1rem;
+		border: 1px solid var(--line);
+		border-radius: 12px;
+	}
+	.pay-meta {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+	}
+	.pay-meta strong {
+		font-size: 0.9rem;
+		color: var(--gray-100);
+	}
+	.pay-row .btn {
+		font-size: 0.8125rem;
+		padding: 0.6rem 1.1rem;
+	}
+	.pay-btn.is-locked {
+		pointer-events: none;
+		opacity: 0.4;
+		filter: grayscale(0.4);
+		box-shadow: none;
+	}
+	.pay-lock {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+	}
+	.pay-lock .unlocked-msg {
+		color: var(--cyan) !important;
+	}
+
+	.aside-svc {
+		list-style: none;
+		margin: 0.6rem 0 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+	.aside-svc li {
+		display: flex;
+		flex-direction: column;
+		gap: 0.1rem;
+		font-size: 0.85rem;
+		color: var(--gray-100);
+	}
+
+	.aside {
+		padding: 1.6rem;
+		border-color: var(--line-bright);
+		box-shadow: 0 0 70px -24px rgba(157, 123, 255, 0.5);
+		align-self: start;
+	}
+	.aside-price {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 1.5rem;
+		color: #fff;
+		margin-top: 0.6rem;
+		letter-spacing: -0.02em;
+	}
+	.aside-text {
+		font-size: 0.8125rem;
+		color: var(--gray-300) !important;
+		margin-top: 0.6rem;
+		line-height: 1.6;
+	}
+	.aside .btn {
+		width: 100%;
+		margin-top: 1rem;
+	}
+	.aside .btn svg {
+		width: 0.85rem;
+		height: 0.85rem;
+	}
+	.hr {
+		height: 1px;
+		background: var(--line);
+		margin: 1.4rem 0;
+	}
+
+	#consult {
+		scroll-margin-top: 5rem;
+	}
+
+	@media (min-width: 60em) {
+		.layout {
+			grid-template-columns: 1fr 21rem;
+			gap: 4rem;
+		}
+		.tracks {
+			flex-direction: row;
+			align-items: stretch;
+		}
+		.tracks .track {
+			flex: 1 1 0;
+		}
+		.consult {
+			grid-template-columns: 1fr 1fr;
+		}
+		.aside {
+			position: sticky;
+			top: 5.5rem;
+		}
+	}
+</style>

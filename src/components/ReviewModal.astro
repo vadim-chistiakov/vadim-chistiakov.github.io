@@ -1,0 +1,165 @@
+---
+/**
+ * Modal that shows member reviews for a company. Mount once per page; any element with
+ * `data-review-ids="id1,id2"` (+ optional `data-review-title`) opens it.
+ * Only reviews referenced from `companyReviews` are rendered.
+ */
+import ReviewCard from './ReviewCard.astro';
+import { reviews, companyReviews } from '../data/reviews';
+import type { Lang } from '../i18n/config';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+	lang?: Lang;
+}
+const { lang = 'ru' } = Astro.props;
+const t = useTranslations(lang);
+
+const used = new Set(Object.values(companyReviews).flat());
+const modalReviews = reviews.filter((r) => used.has(r.id));
+---
+
+<dialog id="review-modal" class="review-modal" aria-labelledby="review-modal-title">
+	<div class="rm-head">
+		<h3 id="review-modal-title" class="rm-title">{t('reviewModal.title')}</h3>
+		<button type="button" class="rm-close" id="review-modal-close" aria-label={t('offers.modal.close')}>
+			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>
+		</button>
+	</div>
+	<div class="rm-body">
+		<a class="rm-image-link" id="review-modal-image-link" href="#" target="_blank" rel="noopener" title={t('reviewModal.openFull')} hidden>
+			<img class="rm-image" id="review-modal-image" alt="" />
+		</a>
+		{modalReviews.map((r) => (
+			<div class="rm-item" data-review-id={r.id} hidden>
+				<ReviewCard review={r} lang={lang} expanded />
+			</div>
+		))}
+	</div>
+</dialog>
+
+<script>
+	const modal = document.getElementById('review-modal') as HTMLDialogElement | null;
+	if (modal) {
+		const title = document.getElementById('review-modal-title')!;
+		const body = modal.querySelector<HTMLElement>('.rm-body')!;
+		const items = [...modal.querySelectorAll<HTMLElement>('[data-review-id]')];
+		const imageLink = document.getElementById('review-modal-image-link') as HTMLAnchorElement;
+		const image = document.getElementById('review-modal-image') as HTMLImageElement;
+		const defaultTitle = title.textContent ?? '';
+
+		document.addEventListener('click', (e) => {
+			const trigger = (e.target as HTMLElement).closest<HTMLElement>('[data-review-ids],[data-offer-image]');
+			if (!trigger) return;
+			const ids = (trigger.dataset.reviewIds ?? '').split(',').filter(Boolean);
+			const src = trigger.dataset.offerImage;
+			imageLink.hidden = !src;
+			modal.classList.toggle('is-image', !!src);
+			if (src) {
+				image.src = src;
+				image.alt = trigger.dataset.reviewTitle ?? '';
+				imageLink.href = src;
+			}
+			items.forEach((el) => (el.hidden = !ids.includes(el.dataset.reviewId!)));
+			// show in the order the ids are listed in `companyReviews`
+			ids.forEach((id) => {
+				const el = items.find((i) => i.dataset.reviewId === id);
+				if (el) body.append(el);
+			});
+			title.textContent = trigger.dataset.reviewTitle || defaultTitle;
+			body.scrollTop = 0;
+			modal.showModal();
+			document.documentElement.style.overflow = 'hidden';
+		});
+
+		const close = () => modal.open && modal.close();
+		document.getElementById('review-modal-close')!.addEventListener('click', close);
+		modal.addEventListener('click', (e) => {
+			if (e.target === modal) close(); // click on the backdrop
+		});
+		modal.addEventListener('close', () => {
+			image.removeAttribute('src');
+			document.documentElement.style.overflow = '';
+		});
+	}
+</script>
+
+<style>
+	.review-modal {
+		width: min(34rem, calc(100vw - 2rem));
+		max-height: min(85vh, 820px);
+		margin: auto;
+		padding: 0;
+		border: 1px solid var(--line-bright);
+		border-radius: 18px;
+		background: var(--panel-solid);
+		color: var(--gray-100);
+		overflow: hidden;
+		box-shadow: 0 40px 120px -30px rgba(0, 0, 0, 0.8), var(--glow-lg);
+	}
+	.review-modal[open] {
+		display: flex;
+		flex-direction: column;
+	}
+	.review-modal::backdrop {
+		background: rgba(5, 6, 10, 0.72);
+		backdrop-filter: blur(6px);
+	}
+	.rm-head {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 0.9rem 1.1rem;
+		border-bottom: 1px solid var(--line);
+	}
+	.rm-title {
+		flex: 1;
+		min-width: 0;
+		font-size: 1rem;
+	}
+	.rm-close {
+		flex-shrink: 0;
+		display: grid;
+		place-items: center;
+		width: 2rem;
+		height: 2rem;
+		border: 1px solid var(--line);
+		border-radius: 999px;
+		background: transparent;
+		color: var(--gray-200);
+		cursor: pointer;
+	}
+	.rm-close:hover {
+		border-color: var(--line-bright);
+		color: #fff;
+	}
+	.rm-close svg {
+		width: 1rem;
+		height: 1rem;
+	}
+	.rm-body {
+		overflow-y: auto;
+		padding: 1rem;
+		display: grid;
+		gap: 1rem;
+	}
+	.review-modal.is-image {
+		width: min(48rem, calc(100vw - 2rem));
+	}
+	.rm-image-link {
+		display: block;
+	}
+	.rm-image-link[hidden] {
+		display: none;
+	}
+	.rm-image {
+		display: block;
+		width: 100%;
+		height: auto;
+		border-radius: 12px;
+		border: 1px solid var(--line);
+	}
+	.rm-item[hidden] {
+		display: none;
+	}
+</style>
