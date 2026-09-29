@@ -10,16 +10,16 @@ export interface Chat {
 }
 
 const descRu = [
-	'Основной чат сообщества — карьера, интервью, поиск работы, релокация и жизнь.',
-	'Алгоритмические задачи и реальные интервью от топовых IT-компаний.',
-	'Всё для подготовки кейса на визу таланта в Великобританию.',
-	'Открытый телеграм-канал про мобильную разработку и жизнь в Лондоне.',
+	'Основной чат сообщества — карьера, интервью, поиск работы, релокация и жизнь',
+	'Алгоритмические задачи и реальные интервью от топовых IT-компаний',
+	'Всё для подготовки кейса на визу таланта в Великобританию',
+	'Открытый телеграм-канал про мобильную разработку и жизнь в Лондоне',
 ];
 const descEn = [
-	'The main community chat — careers, interviews, job search, relocation and life.',
-	'Algorithm problems and real interviews from top IT companies.',
-	'Everything for building a UK Global Talent visa case.',
-	'An open Telegram channel about mobile development and life in London.',
+	'The main community chat — careers, interviews, job search, relocation and life',
+	'Algorithm problems and real interviews from top IT companies',
+	'Everything for building a UK Global Talent visa case',
+	'An open Telegram channel about mobile development and life in London',
 ];
 
 const meta = [
