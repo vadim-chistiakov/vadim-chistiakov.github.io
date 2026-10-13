@@ -13,7 +13,7 @@ const { lang = 'ru' } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<Section number={t('reviews.num')} eyebrow={t('reviews.eyebrow')} title={t('reviews.title')}>
+<Section id="review" number={t('reviews.num')} eyebrow={t('reviews.eyebrow')} title={t('reviews.title')}>
 	<p class="lead">
 		{t('reviews.lead.pre')}<a href={links.reviewsChannel} target="_blank" rel="noopener">{t('reviews.lead.channel')}</a>.
 		<a href={links.reviews} target="_blank" rel="noopener">{t('reviews.lead.all')}</a>

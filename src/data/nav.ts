@@ -10,8 +10,8 @@ export interface NavItem {
 export const getNavItems = (lang: Lang): NavItem[] => {
 	const labels =
 		lang === 'en'
-			? ['Community', 'Tiers', 'Knowledge', 'Offers', 'About', 'Mentorship', 'FAQ']
-			: ['Сообщество', 'Тиры', 'База знаний', 'Офферы', 'Про меня', 'Менторство', 'FAQ'];
-	const hrefs = ['#community', '#tiers', '#knowledge', '#offers', '#about', '#mentorship', '#faq'];
+			? ['Community', 'Tiers', 'Knowledge', 'Offers', 'About', 'Mentorship', 'Reviews', 'FAQ']
+			: ['Сообщество', 'Тиры', 'База знаний', 'Офферы', 'Про меня', 'Менторство', 'Отзывы', 'FAQ'];
+	const hrefs = ['#community', '#tiers', '#knowledge', '#offers', '#about', '#mentorship', '#review', '#faq'];
 	return labels.map((label, i) => ({ label, href: hrefs[i] }));
 };
